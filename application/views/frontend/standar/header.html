@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="<?php echo $identitas['author'];?>">
+    <meta name="title" content="<?php echo $identitas['judul'];?>" />
+    <meta name="description" content="<?php echo $identitas['meta_deskripsi']; ?>" />
+    <meta name="keywords" content="<?php echo $identitas['keywords']; ?>" />
+    <link href="<?php echo base_url('asset/logo/logo.png');?>" rel="shortcut icon">
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="id" />
+    <meta name="language" content="id" />
+    <meta name="geo.country" content="id" />
+    <meta http-equiv="content-language" content="In-Id" />
+    <meta name="geo.placename" content="Indonesia" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+
+  <title><?php echo $identitas['judul'];?></title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="<?php echo base_url('asset/frontend/standar/vendor/bootstrap/css/bootstrap.min.css');?>" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="<?php echo base_url('asset/frontend/standar/vendor/bootstrap/css/small-business.css');?>" rel="stylesheet">
+  
+  <!-- Custom styles for this template -->
+  <link href="<?php echo base_url('asset/frontend/standar/vendor/bootstrap/css/blog-post.css');?>" rel="stylesheet">
+
+  <!-- Page level plugin CSS-->
+  <link href="<?php echo base_url('asset/admin/vendor/datatables/dataTables.bootstrap4.css');?>" rel="stylesheet">
+
+  <!-- Custom fonts for this template-->
+  <link href="<?php echo base_url('asset/admin/vendor/fontawesome-free/css/all.min.css');?>" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-white fixed-top">
+    <div class="container">
+      <img src="<?php echo base_url('asset/logo/logo.png')?>" width="40" height="40">&nbsp;&nbsp;
+      <a class="navbar-brand text-dark" href="<?php echo base_url();?>">KebaikanKita.com</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link text-dark" href="<?php echo base_url();?>">Beranda<span class="sr-only">(current)</span></a>
+          </li>
+          <?php
+            foreach($kategori_pilihan->result_array() as $kat){
+          ?>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="<?php echo base_url('kategori/cari');?>/<?php echo $kat['NAMA_KATEGORI'];?>"><?php echo $kat['NAMA_KATEGORI'];?></a>
+          </li>
+          <?php } ?>          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Kategori
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <?php
+                foreach($kategori->result_array() as $kat){
+              ?>
+              <a class="dropdown-item" href="<?php echo base_url('kategori/cari');?>/<?php echo $kat['NAMA_KATEGORI'];?>"><?php echo $kat['NAMA_KATEGORI']; ?></a>
+              <?php } ?> 
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <form action="<?php echo base_url('artikel/cari');?>" method="POST" class="form-inline my-2 my-lg-0" >
+                <div class="input-group">
+                  <input name="cari" type="text" class="form-control" placeholder="Mencari..." aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary my-2 my-sm-0">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+            </form>
+          </li>
+          <li class="nav-item mr-1">
+              <p>&nbsp;</p>
+          </li>
+          <li class="nav-item">
+              <div class="dropdown">
+                <?php 
+                  $this->load->library('ion_auth');
+                  if(!$this->ion_auth->logged_in()){
+                ?>
+                  <a class="btn btn-outline-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Masuk
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="<?php echo base_url('auth/login');?>">Login</a>
+                  </div>
+                <?php    
+                  }else{
+                ?>
+                  <a class="btn btn-outline-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <?php                   
+                      $user = $this->ion_auth->user()->row();
+                      echo $user->first_name;
+                    ?>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="<?php echo base_url('admin');?>">Admin &nbsp;<span class="badge badge-primary badge-pill"><?php if($notifikasi>0){echo $notifikasi;}?></span></a>
+                    <a class="dropdown-item" href="<?php echo base_url('Auth/Logout');?>">Logout</a>
+                  </div>
+                <?php }?>
+              </div>
+          </li>
+        </ul>
+      </div>
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    </div>
+  </nav>

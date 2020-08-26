@@ -1,0 +1,190 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/profil');?>">Profil</a>
+      </li>
+      <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/profil');?>">Detail Profil</a></li>
+    </ol>  
+
+    <!-- Beri id "pesan-error" untuk menampung pesan error -->
+    <div id="pesan-error" ></div>
+
+    <!-- Beri id "pesan-sukses" untuk menampung pesan sukses -->
+    <div id="pesan-sukses"></div>
+    
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fas fa-user"></i>
+              <b>Profil</b> 
+            </div>
+            <div class="card-body">
+              <?php 
+                $profil = $this->MyModel->getprofil($_SESSION['user_id']);
+                if(isset($profil)){
+              ?>    
+              <form id="formBuat" method="POST">               
+                <div class="form-group">
+                  <div class="form-label-group">
+                      <center>
+                        <img class="rounded-circle" id="gambar" src="<?php echo base_url() . $profil->photo_profil;?>" width="300" height="300">
+                      </center>
+                      <input type="file" id="fileku" name="file" size="33" />
+                  </div>
+                  <small id="judulHelp" class="form-text text-muted">Upload foto profil Anda!</small>
+                </div>
+                  
+                <input type="hidden" value="" name="pathfoto" id="pathfoto" class="form-control">
+                <input value="<?php echo $profil->id;?>" name="id" type="hidden" id="id" class="form-control">  
+                <div class="form-group">
+                  <div class="form-row">
+                    <div class="col-md-6">
+                      <div class="form-label-group">
+                        <input value="<?php echo $profil->first_name;?>" name="firstname" type="text" id="firstName" class="form-control" placeholder="First name" required="required" autofocus="autofocus">
+                        <label for="firstName">Nama depan</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-label-group">
+                        <input value="<?php echo $profil->last_name;?>" name="lastname" type="text" id="lastName" class="form-control" placeholder="Last name" required="required">
+                        <label for="lastName">Nama belakang</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input value="<?php echo $profil->email;?>" name="email" type="email" id="email" class="form-control" placeholder="Email address" required="required">
+                    <label for="inputEmail">E-mail</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input value="<?php echo $profil->phone;?>" name="phone" type="text" id="phone" class="form-control" placeholder="No telp" required="required">
+                    <label for="inputTelp">No telp</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input value="<?php echo $profil->company;?>" name="company" type="text" id="company" class="form-control" placeholder="Perusahaan/ instansi/ sekolah" required="required">
+                    <label for="inputPerusahaan">Perusahaan/ Sekolah/ Organisasi</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label for="judul"><b>Biodata Diri</b></label>
+                  <div class="form-label-group">
+                    <textarea name="aboutme" type="text" id="mytextarea" class="form-control" placeholder="Tentang profilku...." required="required">
+                      <?php echo $profil->about_me;?>
+                    </textarea>         
+                  </div>
+                  <small id="judulHelp" class="form-text text-muted">Tulis sekilas tentang biodata diri Anda!</small>
+                </div>
+                <div class="form-group">
+                  <div class="form-row">
+                    <div class="col-md-6">
+                      <div class="form-label-group">
+                        <input name="password" type="password" id="password" class="form-control" placeholder="Password" required="required">
+                        <label for="inputPassword">Password</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-label-group">
+                        <input name="confirmpassword" type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" required="required">
+                        <label for="confirmPassword">Konfirmasi password</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <input id="btn-simpan" class="btn btn-primary btn-block" type="button" name="simpan" value="Simpan">
+              </form>
+              <?php }?>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+        </div>
+        </ol>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+        <!-- Custom js for this page-->
+      <script type="text/javascript">
+        //kategori
+        $(document).ready(function(){
+          
+          var BASE_URL = "<?php echo base_url();?>"; 
+          $('#pesan-error').hide();
+          $('#pesan-sukses').hide();          
+          $('#btn-simpan').on('click', function(){
+            $.ajax({
+              url: BASE_URL + 'profil/simpan',
+              enctype: 'multipart/form-data',
+              data: $("#formBuat").serialize(),
+              secureuri       :false,
+              fileElementId   :'profile_image',
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status == 'sukses'){
+                  alert(response.pesan);
+                  $('#pesan-sukses').html('<div class="alert alert-success">' + response.pesan + '</div>').fadeIn().delay(10000).fadeOut();
+                }else{
+                  alert(response.pesan);
+                  $('#pesan-error').html('<div class="alert alert-danger">' + response.pesan + '</div>').fadeIn().delay(10000).fadeOut();
+                }
+              },
+              error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                alert(xhr.responseText) 
+              }                
+            });
+          });                    
+
+                $('#fileku').on('change', function () {
+                    var BASE_URL = "<?php echo base_url();?>";
+                    var file_data = $('#fileku').prop('files')[0];
+                    var form_data = new FormData();
+                    form_data.append('file', file_data);
+                    $.ajax({
+                        url: BASE_URL + 'profil/upload_file', // point to server-side controller method
+                        dataType: 'text', // what to expect back from the server
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                            $('#pathfoto').val(response); // display success response from the server
+                            var path_foto = BASE_URL + response;
+                            $('#gambar').attr('src',path_foto);
+                            //$('#gambar').attr('width',300);
+                            //$('#gambar').attr('height',300);
+                            //updateImage();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                          alert(xhr.responseText); // display error response from the server
+                        }
+                    });
+                });
+
+                function updateImage(){ //jika butuh refresh #gambar 
+                  var image = document.getElementById("gambar");
+                  if(image.complete) {
+                      var new_image = new Image();
+                      //set up the new image
+                      new_image.id = "theText";
+                      new_image.src = image.src;           
+                      // insert new image and remove old
+                      image.parentNode.insertBefore(new_image,image);
+                      image.parentNode.removeChild(image);
+                  }
+                  setTimeout(updateImage, 1000);
+              }
+
+        })
+</script>

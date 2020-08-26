@@ -1,0 +1,42 @@
+    <div class="site-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- Breadcrumbs-->
+              <ol class="breadcrumb bg-transparent mb-5">
+                <ol class="breadcrumb bg-transparent ">
+                  <ol class="breadcrumb bg-transparent ">
+                <li class="breadcrumb-item">
+                  <a class="text-black" href="<?php echo base_url('');?>">Beranda </a>
+                </li>
+                <li class="breadcrumb-item active">
+                  <a class="text-black" href="<?php echo base_url('tentang_kami');?>">Tentang Kami</a>
+                </li>
+              </ol>
+              </ol>
+            </ol>
+
+            <!-- Title -->
+            <h2 class="mt-4"><center><?php echo $kontak->NAMA_KONTAK; ?></center></h2>
+
+            <!-- Author -->
+            <hr>
+            <p class="lead">
+              <div class="bio-pic rounded-circle mr-3">
+                  <p class="mt-4">
+                    <center></center>
+                  </p>
+              </div>
+            </p>
+
+            <!-- Post Content -->
+            <p class="lead mt-4">
+              <?php echo $kontak->DESKRIPSI; ?>
+            </p>             
+          </div>
+          
+        </div>
+
+        
+      </div>
+    </div>

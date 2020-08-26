@@ -1,0 +1,190 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="<?php echo base_url('Admin/antibullying_pengujian');?>">Pengujian</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="#">Detail Pengujian</a></li>
+      </ol>  
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-table"></i>
+                <b>Edit Data Artikel</b>
+              </div>
+              <div class="card-body">
+                  <?php if(isset($pengujian)){?>
+                  <form id="formArtikel" method="POST">
+
+                      <div class="form-group">
+                          <label for="judul"><b>ID Uji</b></label>
+                          <input name="iduji" type="text" class="form-control" id="iduji" aria-describedby="iduji" placeholder="..." value="<?php echo $pengujian->ID_UJI;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="tanggal"><b>Tanggal Uji</b></label>
+                        <input name="tanggalartikel" type="date" class="form-control" id="tanggal" aria-describedby="Judul" placeholder="Masukkan judul..." value="<?php echo $pengujian->TGL_UJI;?>">
+                      </div>
+
+                      <div class="form-group">
+                          <label for="topik"><b>Total Dataset</b></label>
+                          <input name="totaldata" type="text" class="form-control" id="totaldata" aria-describedby="totaldata" placeholder="..." value="<?php echo $pengujian->TOTAL_DATA;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="topik"><b>Data Tes</b></label>
+                        <input name="datates" type="text" class="form-control" id="datates" aria-describedby="datates" placeholder="..." value="<?php echo $pengujian->DATA_TES;?>">
+                    </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Total Data Cyberbullying</b></label>
+                        <input name="cyberbullying" type="text" class="form-control" id="cyberbullying" aria-describedby="cyberbullying" placeholder="..." value="<?php echo $pengujian->JML_CYBERBULLYING;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Total Data Non-cyberbullying</b></label>
+                        <input name="noncyberbullying" type="text" class="form-control" id="noncyberbullying" aria-describedby="noncyberbullying" placeholder="..." value="<?php echo $pengujian->JML_NONCYBERBULLYING;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Total [Aktual] Cyberbullying - [Prediksi] Benar (TP)</b></label>
+                        <input name="tp" type="text" class="form-control" id="tp" aria-describedby="tp" placeholder="..." value="<?php echo $pengujian->TP;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Total [Aktual] Cyberbullying - [Prediksi] Salah (FP)</b></label>
+                        <input name="fp" type="text" class="form-control" id="fp" aria-describedby="fp" placeholder="..." value="<?php echo $pengujian->FP;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Total [Aktual] Non-cyberbullying - [Prediksi] Benar (TN)</b></label>
+                        <input name="tn" type="text" class="form-control" id="tn" aria-describedby="tn" placeholder="..." value="<?php echo $pengujian->TN;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Total [Aktual] Non-cyberbullying - [Prediksi] Salah (FN)</b></label>
+                        <input name="fn" type="text" class="form-control" id="fn" aria-describedby="fn" placeholder="..." value="<?php echo $pengujian->FN;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Akurasi%</b></label>
+                        <input name="akurasi" type="text" class="form-control" id="akurasi" aria-describedby="akurasi" placeholder="..." value="<?php $temp = $pengujian->AKURASI * 100; echo $temp;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Error Rate%</b></label>
+                        <input name="error" type="text" class="form-control" id="error" aria-describedby="error" placeholder="..." value="<?php $temp = $pengujian->ERROR_RATE * 100; echo $temp;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Specificity%</b></label>
+                        <input name="specificity" type="text" class="form-control" id="specificity" aria-describedby="specificity" placeholder="..." value="<?php $temp = $pengujian->SPECIFICITY * 100; echo $temp;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Recall%</b></label>
+                        <input name="recall" type="text" class="form-control" id="recall" aria-describedby="recall" placeholder="..." value="<?php $temp = $pengujian->RECALL * 100; echo $temp;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Precision%</b></label>
+                        <input name="precisi" type="text" class="form-control" id="precisi" aria-describedby="precisi" placeholder="..." value="<?php $temp = $pengujian->PRECISI * 100; echo $temp;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="fscore"><b>F-Score%</b></label>
+                        <input name="fscore" type="text" class="form-control" id="fscore" aria-describedby="fscore" placeholder="..." value="<?php $temp = $pengujian->F_SCORE * 100; echo $temp;?>">
+                      </div>
+
+                      <div class="form-group">
+                          <label for="isiartikel"><b>Keterangan</b></label>
+                          <textarea id="mytextarea" form="formArtikel" rows="20" name="isiartikel" class="form-control tinymce" required placeholder="Tulis isi artikel...">
+                              <?php echo $pengujian->KETERANGAN;?>
+                          </textarea>
+                      </div>
+                  </form>
+                  <?php }?>
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+          
+          <!-- DataTables tabel data pengujian -->
+          <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-comments"></i>
+                <b>Daftar Datates Pengujian</b>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th><center>ID</center></th>
+                          <th><center>ID Komentar</center></th>
+                          <th><center>Komentar</center></th>
+                          <th><center>Hasil Preprocessing</center></th>
+                          <th><center>Bobot Cyberbullying</center></th>
+                          <th><center>Bobot Non-cyberbullying</center></th>
+                          <th><center>Aktual</center></th>
+                          <th><center>Prediksi</center></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                          foreach($detail->result_array() as $komen){
+                        ?>
+                        <tr>
+                          <td><?php echo $komen['ID_DETAILUJI'];?></td>
+                          <td><?php echo $komen['ID_KOMENTAR'];?></td>
+                          <td><?php echo $komen['KOMENTAR'];?></td>
+                          <td><?php echo $komen['HASIL_PREPROCESSING'];?></td>
+                          <td><?php echo $komen['BOBOT_CYBERBULLYING'];?></td>
+                          <td><?php echo $komen['BOBOT_NONCYBERBULLYING'];?></td>
+                          <td>
+                            <?php
+                              if($komen['AKTUAL']=='non-cyberbullying'){
+                            ?>
+                                <a href="#" class="btn btn-primary"><?php echo $komen['AKTUAL']?></a>
+                            <?php }else{ ?>
+                                <a href="#" class="btn btn-danger" ><?php echo $komen['AKTUAL']?></a>
+                            <?php  }
+                            ?>
+                          </td>
+                          <td>
+                            <?php
+                              if($komen['PREDIKSI']=='non-cyberbullying'){
+                            ?>
+                                <a href="#" class="btn btn-primary"><?php echo $komen['PREDIKSI']?></a>
+                            <?php }else{ ?>
+                                <a href="#" class="btn btn-danger" ><?php echo $komen['PREDIKSI']?></a>
+                            <?php  }
+                            ?>
+                          </td>
+                        </tr>
+                        <?php }?>
+                      </tbody>  
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+
+  <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+
+  <script type="text/javascript">      
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+    })
+  </script>

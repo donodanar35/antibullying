@@ -1,0 +1,268 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/kategori');?>">Kategori</a>
+      </li>
+      <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/kategori');?>">Detail Kategori</a></li>
+    </ol>  
+    
+    <button type="button" id="btn-tambah" data-toggle="modal" data-target="#formTambah" class="btn btn-success mb-3 pull-right">
+      <span class="glyphicon glyphicon-plus"></span> &nbsp;Tambah Data
+    </button>
+
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fas fa-list"></i>
+              <b>Daftar Kategori</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                            <tr>
+                                <th><center>No</center></th>
+                                <th><center>Nama Kategori</center></th>
+                                <th><center>Featured</center></th>
+                                <th><center>Action</center></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                      <?php $n=1;
+                        foreach($kategori->result_array() as $d){
+                      ?>
+                        <tr>
+                          <td><?php echo $n;?></td>
+                          <td><?php echo $d['NAMA_KATEGORI'];?></td>
+                          <td><?php echo $d['FEATURED'];?></td>
+                        <td>
+                          <center>
+                              <a href="<?php echo site_url();?>kategori/ubahKategori" class="btn btn-success ubahkategori"  data-toggle="modal" data-target="#formEdit" data-idy="<?= $d['ID_KATEGORI'];?>">Edit</a>
+                              <a href="<?php echo site_url();?>kategori/hapusKategori/<?php echo $d['ID_KATEGORI'];?>" class="btn btn-danger hapuskategori" data-toggle="modal" data-target="#formHapus" data-idx="<?= $d['ID_KATEGORI'];?>">Hapus</a>
+                          </center>
+                        </td>
+                        </tr>
+                        <?php $n++; }?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+        </ol>
+    </div>
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="formHapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formHapusJudul">Hapus Kategori</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="<?php echo site_url();?>kategori/kategori_hapus" method="post">
+                <input type="text" id="idkategori" name="idkategori">
+                <p></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Hapus</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal hapus-->
+
+  <!-- Modal Tambah -->
+  <div class="modal fade" id="formTambah" tabindex="-1" role="dialog" aria-labelledby="judulModalTambah" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formModalTambahLabel">Tambah Kategori</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Beri id "pesan-error" untuk menampung pesan-->
+            <div id="pesan-error-tambah" class="alert alert-danger"></div>
+            <div id="pesan-sukses-tambah" class="alert alert-success"></div>
+
+            <form>
+                <input type="hidden" name="id" id="id">
+                <div class="form-group">
+                    <label for="namakategori">Nama Kategori</label>
+                    <input type="text" class="form-control" id="namakategori" name="namakategori" placeholder="Nama kategori...">
+                </div>
+                <div class="form-group">
+                    <label for="featured">Featured</label>
+                    <select class="form-control" id="featured" name="featured">
+                      <option value="N">Tidak</option>
+                      <option value="Y">Ya</option>
+                    </select>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            <button type="button" id="btn-tambah-kategori" class="btn btn-primary">Simpan Data</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal tambah-->
+
+<!-- Modal Edit -->
+<div class="modal fade" id="formEdit" tabindex="-1" role="dialog" aria-labelledby="judulModalEdit" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formModalEditLabel">Edit Kategori</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Beri id "pesan-error" untuk menampung pesan error -->
+          <div id="pesan-error-edit" class="alert alert-danger"></div>
+          <div id="pesan-sukses-edit" class="alert alert-success"></div>
+
+          <form action="<?= base_url();?>kategori/kategori_ubah" method="post">
+              <input type="hidden" id="idkategori-edit" name="idkategori" class="idkategori">
+              <div class="form-group">
+                  <label for="namakategori">Nama Kategori</label>
+                  <input type="text" class="form-control" id="namakategori-edit" name="namakategori" placeholder="Nama kategori">
+              </div>
+              <div class="form-group">
+                  <label for="featured">Featured</label>
+                  <select class="form-control" id="featured" name="featured">
+                    <option value="N">Tidak</option>
+                    <option value="Y">Ya</option>
+                  </select>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+          <button type="button" id="btn-ubah-kategori" class="btn btn-primary">Ubah Data</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+<!-- Akhir dari modal edit-->
+
+  </div>
+  <!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+        <!-- Custom js for this page-->
+      <script type="text/javascript">
+        //kategori
+        $(document).ready(function(){
+          var BASE_URL = "<?php echo base_url();?>"; 
+
+          $('.ubahkategori').on('click', function(){
+              $('#pesan-error-edit').hide();
+              $('#pesan-sukses-edit').hide();
+              const idx = $(this).data('idy');
+              $.ajax({
+                  url: BASE_URL + 'kategori/getkategori',
+                  data: {idx : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(data){
+                      $('#idkategori-edit').val(data.ID_KATEGORI);
+                      $('#namakategori-edit').val(data.NAMA_KATEGORI);
+                      $('#aktifkategori-edit').val(data.AKTIF); 
+                      //console.log(data);
+
+                      $('#btn-ubah-kategori').on('click', function(){
+                        $.ajax({
+                          url: BASE_URL + 'kategori/kategori_ubah',
+                          data: $("#formEdit form").serialize(),
+                          method: 'post',
+                          dataType: 'json',
+                          success: function(response){
+                              if(response.status == 'sukses'){
+                                $('#pesan-sukses-edit').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                                var url = "";
+                                window.setTimeout(function(){ window.location = url; },3000);
+                              }else{
+                                $('#pesan-error-edit').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                              }
+                            },
+                              error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                                alert(xhr.responseText) 
+                              }
+                          });
+                      });
+
+                      /*if(response.status == 'sukses'){
+                        $('#pesan-error-edit').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                        var url = "";
+                        window.setTimeout(function(){ window.location = url; },3000);
+                            //window.location.replace("http://localhost/rahmatkita/admin/kategori");
+                      }else{
+                        $('#pesan-error-edit').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                      }*/            
+                  }
+              });
+          });
+
+          $('.hapuskategori').on('click', function(){
+              $('#formHapusJudul').html('Hapus Kategori');
+              $('#formHapus .modal-dialog .modal-content .modal-footer button[type=submit]').html('Hapus Data');             
+              const idx = $(this).data('idx');
+              $.ajax({
+                  url: BASE_URL + 'Kategori/getkategori',
+                  data: {idx : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(data){
+                    $('#idkategori').val(data.ID_KATEGORI);
+                      $('#idkategori').attr('type','hidden'); 
+                      $('#formHapus .modal-dialog .modal-content .modal-body form p').html('Anda yakin mau menghapus data '+ data.NAMA_KATEGORI + ' ?');  
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+
+          $('#btn-tambah').on('click', function(){
+              $('#pesan-error-tambah').hide();
+              $('#pesan-sukses-tambah').hide();
+              $('#btn-tambah-kategori').on('click', function(){
+                  $.ajax({
+                    url: BASE_URL + 'Kategori/kategori_buat',
+                    data: $("#formTambah form").serialize(),
+                    method: 'post',
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.status=='sukses'){
+                          $('#pesan-sukses-tambah').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                          //var host = '<?php= echo json_encode(base_url()); ?>'
+                          var url = "";
+                          window.setTimeout(function(){ window.location = url; },3000);
+                          //window.location.replace("http://localhost/rahmatkita/admin/kategori");
+                        }else{
+                          $('#pesan-error-tambah').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                        }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                        alert(xhr.responseText) 
+                      }
+                  });
+              });
+          });
+      })
+    </script>

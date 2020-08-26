@@ -1,0 +1,562 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('Admin/antibullying');?>">Dataset Artikel</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="<?php echo base_url('Admin/antibullying_komentar');?>">Dataset Komentar</a></li>
+      </ol>  
+
+
+          <a id="btn-tambah" href="#" class="konfir-preprocessing btn btn-success mb-3 pull-right" data-toggle="modal" data-target="#formKonfir">
+              <span class="glyphicon glyphicon-plus"></span> &nbsp;Case Folding
+          </a>
+
+          <a id="btn-tambah" href="#" class="konfir-preprocessing-cleaning btn btn-success mb-3 pull-right" data-toggle="modal" data-target="#formKonfirCleaning">
+              <span class="glyphicon glyphicon-plus"></span> &nbsp;Cleaning
+          </a>
+
+          <a id="btn-tambah" href="#" class="konfir-preprocessing-normalisasi btn btn-success mb-3 pull-right" data-toggle="modal" data-target="#formKonfirNormalisasi">
+              <span class="glyphicon glyphicon-plus"></span> &nbsp;Normalisasi Bahasa Gaul
+          </a>
+
+          <a id="btn-tambah" href="#" class="konfir-preprocessing-stemming btn btn-success mb-3 pull-right" data-toggle="modal" data-target="#formKonfirStemming">
+            <span class="glyphicon glyphicon-plus"></span> &nbsp;Stemming
+          </a>
+
+          <a id="btn-tambah" href="#" class="konfir-preprocessing-stopword btn btn-success mb-3 pull-right" data-toggle="modal" data-target="#formKonfirStopword">
+            <span class="glyphicon glyphicon-plus"></span> &nbsp;Stopword
+          </a>
+          
+          <a id="btn-tambah" href="#" class="konfir-preprocessing-tokenizing btn btn-success mb-3 pull-right" data-toggle="modal" data-target="#formKonfirTokenizing">
+              <span class="glyphicon glyphicon-plus"></span> &nbsp;Tokenizing
+          </a>
+          
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-comments"></i>
+                <b>Dataset Komentar</b>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th><center>ID</center></th>
+                          <th><center>ID ARTIKEL</center></th>
+                          <th><center>Komentar</center></th>
+                          <th><center>Case Folding</center></th>
+                          <th><center>Cleaning</center></th>                          
+                          <th><center>Normalisasi</center></th>
+                          <th><center>Stemming</center></th>
+                          <th><center>Stopword</center></th>
+                          <th><center>Tokenizing</center></th>
+                          <th><center>Bully?</center></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>  
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+  <!-- Modal Konfir case folding-->
+  <div class="modal fade" id="formKonfir" tabindex="-1" role="dialog" aria-labelledby="formKonfir" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formKonfirJudul">Hapus Kategori</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST">
+                <p></p>
+                <div class="progress">
+                  <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+            <button disabled type="button" class="btn btn-primary proses" id="btn-proses-folding">Proses</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal konfir case folding-->
+
+   <!-- Modal Konfir cleaning-->
+   <div class="modal fade" id="formKonfirCleaning" tabindex="-1" role="dialog" aria-labelledby="formKonfirCleaning" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formKonfir-Cleaning-Judul">Hapus Kategori</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+              <p></p>
+              <div class="progress">
+                <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+          <button disabled type="button" class="btn btn-primary btn-prose-cleaning proses" id="btn-proses-cleaning">Proses</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+<!-- Akhir dari modal konfir cleaning-->
+
+<!-- Modal Konfir normalisasi-->
+<div class="modal fade" id="formKonfirNormalisasi" tabindex="-1" role="dialog" aria-labelledby="formKonfirNormalisasi" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formKonfirNormalisasiJudul">Hapus Kategori</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            <p></p>
+            <div class="progress">
+              <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+        <button disabled type="button" class="btn btn-primary proses" id="btn-proses-normalisasi">Proses</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal konfir normalisasi-->
+
+<!-- Modal Konfir stemming-->
+<div class="modal fade" id="formKonfirStemming" tabindex="-1" role="dialog" aria-labelledby="formKonfirStemming" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formKonfirStemmingJudul">Hapus Kategori</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            <p></p>
+            <div class="progress">
+              <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+        <button disabled type="button" class="btn btn-primary proses" id="btn-proses-stemming">Proses</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal konfir stemming-->
+
+<!-- Modal Konfir stopword-->
+<div class="modal fade" id="formKonfirStopword" tabindex="-1" role="dialog" aria-labelledby="formKonfirStopword" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formKonfirStopwordJudul">Hapus Kategori</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            <p></p>
+            <div class="progress">
+              <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+        <button disabled type="button" class="btn btn-primary proses" id="btn-proses-stopword">Proses</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal konfir stopword-->
+
+<!-- Modal Konfir tokenizing-->
+<div class="modal fade" id="formKonfirTokenizing" tabindex="-1" role="dialog" aria-labelledby="formKonfirTokenizing" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formKonfirTokenizingJudul">Hapus Kategori</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            <p></p>
+            <div class="progress">
+              <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+        <button disabled type="button" class="btn btn-primary proses" id="btn-proses-tokenizing">Proses</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal konfir tokenizing-->
+
+        <!-- Modal Edit -->
+        <div class="modal fade" id="formEdit" tabindex="-1" role="dialog" aria-labelledby="formEdit" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="formEditJudul">Edit Data Komentar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Beri id "pesan-error" untuk menampung pesan error -->
+                <div id="pesan-error-dataset-edit" class="alert alert-danger"></div>
+                <div id="pesan-sukses-dataset-edit" class="alert alert-success"></div>
+                <form class="form-horizontal" id="formbuat">
+                  <div class="form-body">
+                      <input type="hidden" id="iddatasetkomentar-edit" name="idkomentar">
+                      <div class="form-group">
+                          <label for="judulartikel"><b>Komentar</b></label>
+                          <textarea type="text" rows="2" class="form-control" id="isidatasetkomentar-edit" name="isikomentar" placeholder="Tulis komentar artikel..."></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="thread"><b>Sentimen</b></label>
+                        <select class="form-control" id="sentimendatasetkomentar-edit" name="sentimen">
+                          <option class="btn-danger" value="cyberbullying">cyberbullying</option>
+                          <option class="btn-primary" value="non-cyberbullying">non-cyberbullying</option>
+                        </select>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="btn-ubah-dataset">Simpan</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>  
+      <!-- Akhir dari modal Edit-->
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('#pesan-error').hide();
+        $('#pesan-sukses').hide();
+        $('#formKonfir .modal-dialog .modal-content .modal-body form .progress').hide();
+
+        $('#dataTable').DataTable( {
+          "processing": true,
+          "serverSide": false,
+          "ajax": {
+            "url": BASE_URL+ "Antibullying/get_datasetkomentar",
+            "type":"POST"
+          },
+          "columnDefs": [{
+            "targets":[-1],
+            "orderable": true,
+          },       
+          ],
+        });
+
+        $('.konfir-preprocessing-tokenizing').on('click', function(){
+          $('#btn-proses-tokenizing').removeAttr('disabled');
+          $('#formKonfirTokenizingJudul').html('Preprocessing: #6 Tokenizing');
+          $('#formKonfirTokenizing .modal-dialog .modal-content .modal-footer .proses').html('Tokenizing');
+          $('#formKonfirTokenizing .modal-dialog .modal-content .modal-body form p').html('Anda yakin mau tokenizing dataset komentar?'); 
+          $('#formKonfirTokenizing .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $('#btn-proses-tokenizing').on('click', function(){
+            $('#btn-proses-tokenizing').attr('disabled','disabled');
+            $('.btn-tutup-dataset').attr('disabled','disabled');
+            $('#formKonfirTokenizing .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/tokenizing_dataset',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formKonfirTokenizing .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-tokenizing').removeAttr('disabled');
+                    $('.btn-tutup-dataset').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-preprocessing-stopword').on('click', function(){
+          $('#btn-proses-stopword').removeAttr('disabled');
+          $('#formKonfirStopwordJudul').html('Preprocessing: #5 Stopword');
+          $('#formKonfirStopword .modal-dialog .modal-content .modal-footer .proses').html('Stopword');
+          $('#formKonfirStopword .modal-dialog .modal-content .modal-body form p').html('Anda yakin mau stopword dataset komentar?'); 
+          $('#formKonfirStopword .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $('#btn-proses-stopword').on('click', function(){
+            $('#btn-proses-stopword').attr('disabled','disabled');
+            $('.btn-tutup-dataset').attr('disabled','disabled');
+            $('#formKonfirStopword .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/stopword_dataset',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formKonfirStopword .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-stopword').removeAttr('disabled');
+                    $('.btn-tutup-dataset').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-preprocessing-stemming').on('click', function(){
+          $('#btn-proses-stemming').removeAttr('disabled');
+          $('#formKonfirStemmingJudul').html('Preprocessing: #4 Stemming');
+          $('#formKonfirStemming .modal-dialog .modal-content .modal-footer .proses').html('Stemming');
+          $('#formKonfirStemming .modal-dialog .modal-content .modal-body form p').html('Anda yakin mau stemming dataset komentar?'); 
+          $('#formKonfirStemming .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $('#btn-proses-stemming').on('click', function(){
+            $('#btn-proses-stemming').attr('disabled','disabled');
+            $('.btn-tutup-dataset').attr('disabled','disabled');
+            $('#formKonfirStemming .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/stemming_dataset',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formKonfirStemming .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-stemming').removeAttr('disabled');
+                    $('.btn-tutup-dataset').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-preprocessing-normalisasi').on('click', function(){
+          $('#btn-proses-normalisasi').removeAttr('disabled');
+          $('#formKonfirNormalisasiJudul').html('Preprocessing: #3 Normalisasi Bahasa Gaul');
+          $('#formKonfirNormalisasi .modal-dialog .modal-content .modal-footer .proses').html('Normalisasi');
+          $('#formKonfirNormalisasi .modal-dialog .modal-content .modal-body form p').html('Anda yakin mau menormalisasi bahasa gaul pada dataset komentar?'); 
+          $('#formKonfirNormalisasi .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $('#btn-proses-normalisasi').on('click', function(){
+            $('#btn-proses-normalisasi').attr('disabled','disabled');
+            $('.btn-tutup-dataset').attr('disabled','disabled');
+            $('#formKonfirNormalisasi .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/normalisasi_dataset',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formKonfirNormalisasi .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-normalisasi').removeAttr('disabled');
+                    $('.btn-tutup-dataset').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-preprocessing').on('click', function(){
+          $('#btn-proses-folding').removeAttr('disabled');
+          $('#formKonfirJudul').html('Preprocessing: #1 Case Folding');
+          $('#formKonfir .modal-dialog .modal-content .modal-footer .proses').html('Case Folding');
+          $('#formKonfir .modal-dialog .modal-content .modal-body form p').html('Anda yakin mem-case folding dataset komentar?'); 
+          $('#formKonfir .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $('#btn-proses-folding').on('click', function(){
+            $('#btn-proses-folding').attr('disabled','disabled');
+            $('.btn-tutup-dataset').attr('disabled','disabled');
+            $('#formKonfir .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/casefolding_dataset',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formKonfir .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-folding').removeAttr('disabled');
+                    $('.btn-tutup-dataset').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-preprocessing-cleaning').on('click', function(){
+          $('#btn-proses-cleaning').removeAttr('disabled');
+          $('#formKonfirCleaning .modal-dialog .modal-content .modal-body form #progres-cleaning').hide();
+          $('#formKonfir-Cleaning-Judul').html('Preprocessing: #2 Cleaning');
+          $('#formKonfirCleaning .modal-dialog .modal-content .modal-footer .proses').html('Cleaning');
+          $('#formKonfirCleaning .modal-dialog .modal-content .modal-body form p').html('Anda yakin meng-cleaning dataset komentar?');
+          $('#formKonfirCleaning .modal-dialog .modal-content .modal-body form .progress').hide(); 
+          
+          $('.btn-prose-cleaning').on('click', function(){
+            $('#btn-proses-cleaning').attr('disabled','disabled');
+            $('.btn-tutup-dataset').attr('disabled','disabled');
+            $('#formKonfirCleaning .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/cleaning_dataset',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    alert(response.pesan);
+                    $('#formKonfirCleaning .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-cleaning').removeAttr('disabled');
+                    $('.btn-tutup-dataset').removeAttr('disabled');
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('#btn-simpan-artikel').on('click', function(){
+          $.ajax({
+                    url: BASE_URL + 'Antibullying/artikel_ubah',
+                    data: $("#formArtikel").serialize(),
+                    method: 'post',
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.status == 'sukses'){
+                          alert(response.pesan);
+                          $('#pesan-sukses').html(response.pesan).fadeIn().delay(3000).fadeOut();
+                          var url = "";
+                          window.setTimeout(function(){ window.location = url; },100);
+                        }else{
+                          alert(response.pesan);
+                          $('#pesan-error').html(response.pesan).fadeIn().delay(3000).fadeOut();
+                        }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) { 
+                        alert(xhr.responseText) 
+                      }
+                  });
+        });
+
+        $('.btn-tutup-dataset').on('click', function(){
+          var url = "";
+          window.setTimeout(function(){ window.location = url; },1000);
+        });
+
+
+          $('#btn-tambah').on('click', function(){
+              $('#pesan-error-dataset').hide();
+              $('#pesan-sukses-dataset').hide();
+              $('#btn-tambah-dataset').on('click', function(){
+                  $.ajax({
+                    url: BASE_URL + 'Antibullying/dataset_komentar_buat',
+                    data: $("#formbuat").serialize(),
+                    method: 'post',
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.status == 'sukses'){
+                          $('#pesan-sukses-dataset').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                          $('#isikomentar').val('');
+                        }else{
+                          $('#pesan-error-dataset').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                        }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) { 
+                        alert(xhr.responseText) 
+                      }
+                  });
+              });
+          });
+
+          $('.ubahkategori').on('click', function(){
+              $('#pesan-error-dataset-edit').hide();
+              $('#pesan-sukses-dataset-edit').hide();
+              const idx = $(this).data('idy');
+              $.ajax({
+                  url: BASE_URL + 'Antibullying/getdatasetkomentar',
+                  data: {idx : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(data){
+                      $('#iddatasetkomentar-edit').val(data.ID_DATASETKOMENTAR);
+                      $('#isidatasetkomentar-edit').val(data.ISI_KOMENTAR);
+                      $('#sentimendatasetkomentar-edit').val(data.SENTIMEN); 
+
+                      $('#btn-ubah-dataset').on('click', function(){
+                        $.ajax({
+                          url: BASE_URL + 'Antibullying/komentar_ubah',
+                          data: $("#formEdit form").serialize(),
+                          method: 'post',
+                          dataType: 'json',
+                          success: function(response){
+                              if(response.status == 'sukses'){
+                                $('#pesan-sukses-dataset-edit').html(response.pesan).fadeIn().delay(100).fadeOut();
+                                var url = "";
+                                window.setTimeout(function(){ window.location = url; },100);
+                              }else{
+                                $('#pesan-error-dataset-edit').html(response.pesan).fadeIn().delay(100).fadeOut();
+                              }
+                            },
+                              error: function (xhr, ajaxOptions, thrownError) { 
+                                alert(xhr.responseText) 
+                              }
+                          });
+                      });
+
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                  }
+              });
+          });        
+
+    })
+  </script>

@@ -1,0 +1,56 @@
+  <!-- Footer -->
+  <footer class="py-5 bg-white">
+    <div class="container">
+      <div class="row">
+          
+        <div class="col-lg-6">
+          <ul class="list-unstyled mb-0">
+            <li>
+              <a href="<?php echo base_url('Tentang_Kami');?>">Tentang Kami</a><br/>
+            </li>
+            <li>
+              <a target="_blank" href="<?php echo base_url('kebijakan');?>">Kebijakan</a><br/>
+            </li>
+            <li>
+              <a href="<?php echo base_url('FAQ');?>">FAQ</a><br/>
+            </li>
+            <li>
+              <a target="_blank" href="<?php echo base_url('Kritik_Saran');?>">Masukan</a><br/>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-lg-6">
+          <?php
+            foreach($kategori->result_array() as $kat){
+          ?>
+          <ul class="list-unstyled mb-0">
+            <li>
+              <a href="<?php echo base_url('kategori/cari');?>/<?php echo $kat['NAMA_KATEGORI'];?>"><?php echo $kat['NAMA_KATEGORI']; ?></a><br/>
+            </li>
+          </ul>
+          <?php } ?>
+        </div>
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="container">
+          <br/>
+          <p class="m-0 text-center text-dark">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com </p>
+      </div>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="<?php echo base_url('asset/frontend/standar/vendor/jquery/jquery.min.js');?>"></script>
+  <script src="<?php echo base_url('asset/frontend/standar/vendor/bootstrap/js/bootstrap.bundle.min.js');?>"></script>
+
+  <!-- Page level plugin JavaScript-->
+  <script src="<?php echo base_url('asset/admin/vendor/datatables/jquery.dataTables.js');?>"></script>
+  <script src="<?php echo base_url('asset/admin/vendor/datatables/dataTables.bootstrap4.js');?>"></script>
+  
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('Admin/antibullying_kamusgaul');?>">Kamus Kata Gaul</a>
+      </li>
+    </ol>  
+    
+    <a id="btn-tambah" href="#" class="btn btn-success mb-3 pull-right" data-toggle="modal" data-target="#formTambah">
+      <span class="glyphicon glyphicon-plus"></span> &nbsp;Tambah Kata
+    </a>
+
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fas fa-comments"></i>
+              <b>Kamus Bahasa Gaul</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                            <tr>
+                                <th><center>ID</center></th>
+                                <th><center>Kata Gaul</center></th>
+                                <th><center>Kata Formal</center></th>
+                                <th><center>Aktif</center></th>
+                                <th><center>Action</center></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                      <?php $n=0;
+                        foreach($kamus->result_array() as $d){
+                      ?>
+                        <tr>
+                        <td><?php echo $d['ID_KATAGAUL']; ?></td>
+                        <td><?php echo $d['KATAGAUL'];?></td>
+                        <td><?php echo $d['KATAFORMAL'];?></td>
+                        <td><center><?php echo $d['AKTIF'];?></center></td>
+                        <td>
+                          <center>
+                              <a href="#" class="btn btn-success ubahkamusgaul" data-toggle="modal" data-target="#formUbah" data-idx="<?php echo $d['ID_KATAGAUL']; ?>">Ubah</a>
+                              <a href="#" class="btn btn-danger hapuskamusgaul" data-toggle="modal" data-target="#formHapus" data-idy="<?php echo $d['ID_KATAGAUL']; ?>">Hapus</a>
+                          </center>
+                        </td>
+                        </tr>
+                        <?php }?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+        </ol>
+    </div>
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="formHapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formHapusJudul">Hapus Artikel</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="<?php echo base_url('antibullying/hapus_kamusgaul');?>" method="post">
+                <input type="text" id="idkatagaul-hapus" name="idkatagaul">
+                <p></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Hapus</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal hapus-->
+
+  <!-- Modal Tambah -->
+  <div class="modal fade" id="formTambah" tabindex="-1" role="dialog" aria-labelledby="formTambah" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formTambahJudul">Tambah Data Kamus Bahasa Gaul</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Beri id "pesan-error" untuk menampung pesan error -->
+          <div id="pesan-error-dataset" class="alert alert-danger"></div>
+          <div id="pesan-sukses-dataset" class="alert alert-success"></div>
+          <form class="form-horizontal" id="formbuat">
+            <div class="form-body">
+                <input type="hidden" id="id_artikel" name="idartikel">
+                <div class="form-group">
+                    <label for="katagaul"><strong>Kata Gaul</strong></label>
+                    <input type="text" class="form-control" id="katagaul" name="katagaul" placeholder="kata gaul...">
+                </div>
+                <div class="form-group">
+                    <label for="kataformal"><strong>Kata Formal</strong></label>
+                    <input type="text" class="form-control" id="kataformal" name="kataformal" placeholder="kata formal...">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-primary" id="btn-tambah-dataset">Simpan</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+<!-- Akhir dari modal tambah-->
+
+<!-- Modal Ubah -->
+<div class="modal fade" id="formUbah" tabindex="-1" role="dialog" aria-labelledby="formUbah" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formUbahJudul">Ubah Data Kamus Bahasa Gaul</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Beri id "pesan-error" untuk menampung pesan error -->
+          <div id="pesan-error-dataset-edit" class="alert alert-danger"></div>
+          <div id="pesan-sukses-dataset-edit" class="alert alert-success"></div>
+          <form class="form-horizontal" id="formbuat">
+            <div class="form-body">
+                <input type="hidden" id="id_katagaul_edit" name="idkatagaul">
+                <div class="form-group">
+                    <label for="katagaul"><strong>Kata Gaul</strong></label>
+                    <input type="text" class="form-control" id="katagaul-edit" name="katagaul" placeholder="kata gaul...">
+                </div>
+                <div class="form-group">
+                    <label for="kataformal"><strong>Kata Formal</strong></label>
+                    <input type="text" class="form-control" id="kataformal-edit" name="kataformal" placeholder="kata formal...">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-primary" id="btn-ubah-kamus">Ubah</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+<!-- Akhir dari modal ubah-->
+
+  </div>
+  <!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+      <script type="text/javascript">
+        $(document).ready(function(){
+          var BASE_URL = "<?php echo base_url();?>"; 
+
+          $('.ubahkamusgaul').on('click', function(){
+              $('#pesan-error-dataset-edit').hide();
+              $('#pesan-sukses-dataset-edit').hide();
+              const idx = $(this).data('idx');
+              $.ajax({
+                  url: BASE_URL + 'Antibullying/getkamusgaul',
+                  data: {idx : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(data){
+                      $('#id_katagaul_edit').val(data.ID_KATAGAUL);
+                      $('#katagaul-edit').val(data.KATAGAUL);
+                      $('#kataformal-edit').val(data.KATAFORMAL); 
+                      
+                      $('#btn-ubah-kamus').on('click', function(){
+                        $.ajax({
+                          url: BASE_URL + 'Antibullying/kamusgaulubah',
+                          data: $("#formUbah form").serialize(),
+                          method: 'post',
+                          dataType: 'json',
+                          success: function(response){
+                              if(response.status == 'sukses'){
+                                $('#pesan-sukses-dataset-edit').html(response.pesan).fadeIn().delay(100).fadeOut();
+                                var url = "";
+                                window.setTimeout(function(){ window.location = url; },100);
+                              }else{
+                                $('#pesan-error-dataset-edit').html(response.pesan).fadeIn().delay(100).fadeOut();
+                              }
+                            },
+                              error: function (xhr, ajaxOptions, thrownError) { 
+                                alert(xhr.responseText) 
+                              }
+                          });
+                      });
+
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                  }
+              });
+          });
+
+          $('.hapuskamusgaul').on('click', function(){
+              $('#formHapusJudul').html('Hapus Kata Gaul');
+              $('#formHapus .modal-dialog .modal-content .modal-footer button[type=submit]').html('Hapus');       const idx = $(this).data('idy');
+              $.ajax({
+                  url: BASE_URL + 'Antibullying/getdataset_kamusgaul',
+                  data: {idx : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#idkatagaul-hapus').val(response.ID_KATAGAUL);
+                    $('#idkatagaul-hapus').attr('type','hidden'); 
+                    $('#formHapus .modal-dialog .modal-content .modal-body form p').html('Anda yakin mau menghapus kata gaul "'+ response.KATAGAUL + '"?');
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+
+          $('.btn-tutup').on('click', function(){
+            var url = "";
+            window.setTimeout(function(){ window.location = url; },1000);
+          });
+
+          $('#btn-tambah').on('click', function(){
+              $('#pesan-error-dataset').hide();
+              $('#pesan-sukses-dataset').hide();
+              $('#btn-tambah-dataset').on('click', function(){
+                  $.ajax({
+                    url: BASE_URL + 'Antibullying/kamusgaul_buat',
+                    data: $("#formbuat").serialize(),
+                    method: 'post',
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.status == 'sukses'){
+                          $('#pesan-sukses-dataset').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                          $('#katagaul').val('');
+                          $('#kataformal').val('');
+                        }else{
+                          $('#pesan-error-dataset').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                        }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.responseText) 
+                      }
+                  });
+              });
+          });
+      })
+    </script>

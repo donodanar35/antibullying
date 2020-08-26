@@ -1,0 +1,310 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('Admin/antibullying');?>">Dataset Artikel</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="#">Detail</a></li>
+      </ol>  
+
+
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-comments"></i>
+                <b>Edit Data Artikel</b>
+              </div>
+              <div class="card-body">
+                  <?php if(isset($artikel)){?>
+                  <form id="formArtikel" method="POST">
+                      <input name="idartikel" type="hidden" value="<?php echo $artikel->ID_ARTIKEL;?>">  
+                      
+                      <div class="form-group">
+                          <label for="judul"><b>Judul Artikel</b></label>
+                          <input name="judulartikel" type="text" class="form-control" id="judul" aria-describedby="Judul" placeholder="Masukkan judul..." value="<?php echo $artikel->JUDUL_ARTIKEL;?>">
+                      </div>
+
+                      <div class="form-group">
+                          <label for="topik"><b>Topik Artikel</b></label>
+                          <input name="topikartikel" type="text" class="form-control" id="topik" aria-describedby="Topik" placeholder="Masukkan topik..." value="<?php echo $artikel->TOPIK_ARTIKEL;?>">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="sumber"><b>Sumber Artikel</b></label>
+                        <input name="sumberartikel" type="text" class="form-control" id="sumber" aria-describedby="Judul" placeholder="Masukkan judul..." value="<?php echo $artikel->SUMBER_ARTIKEL;?>">
+                      </div>
+
+                      <div class="form-group">
+                          <label for="tanggal"><b>Tanggal Artikel</b></label>
+                          <input name="tanggalartikel" type="date" class="form-control" id="tanggal" aria-describedby="Judul" placeholder="Masukkan judul..." value="<?php echo $artikel->TANGGAL_ARTIKEL;?>">
+                      </div>
+
+                      <div class="form-group">
+                          <label for="isiartikel"><b>Isi Artikel</b></label>
+                          <textarea id="mytextarea" form="formArtikel" rows="20" name="isiartikel" class="form-control tinymce" required placeholder="Tulis isi artikel...">
+                              <?php echo $artikel->ISI_ARTIKEL;?>
+                          </textarea>
+                      </div>
+                      <button id="btn-simpan-artikel" type="button" class="btn btn-primary">Simpan</button>
+                  </form>
+                  <?php }?>
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+
+          <a id="btn-tambah" href="#" class="btn btn-success mb-3 pull-right" data-toggle="modal" data-target="#formTambah">
+              <span class="glyphicon glyphicon-plus"></span> &nbsp;Tambah Komentar
+          </a>
+          
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-comments"></i>
+                <b>Daftar Komentar</b>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th><center>ID</center></th>
+                          <th><center>Komentar</center></th>
+                          <th><center>Case Folding</center></th>
+                          <th><center>Cleaning</center></th>
+                          <th><center>Normalisasi</center></th>
+                          <th><center>Stemming</center></th>
+                          <th><center>Stopword</center></th>
+                          <th><center>Tokenizing</center></th>
+                          <th><center>Sentimen</center></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                          foreach($komentar->result_array() as $komen){
+                        ?>
+                        <tr>
+                            <td><?php echo $komen['ID_DATASETKOMENTAR'];?></td>
+                          <td><?php echo $komen['ISI_KOMENTAR'];?></td>
+                          <td><?php echo $komen['CASE_FOLDING'];?></td>
+                          <td><?php echo $komen['CLEANING'];?></td>
+                          <td><?php echo $komen['NORMALISASI'];?></td>
+                          <td><?php echo $komen['STEMMING'];?></td>
+                          <td><?php echo $komen['STOPWORD'];?></td>
+                          <td><?php echo $komen['TOKENIZING'];?></td>
+                          <td>
+                            <?php
+                              if($komen['SENTIMEN']=='non-cyberbullying' || $komen['SENTIMEN']=='positif'){
+                            ?>
+                                <a href="#" class="btn btn-primary ubahkategori" data-toggle="modal" data-target="#formEdit" data-idy="<?php echo $komen['ID_DATASETKOMENTAR']?>"><?php echo $komen['SENTIMEN']?></a>
+                            <?php }else{ ?>
+                                <a href="#" class="btn btn-danger ubahkategori" data-toggle="modal" data-target="#formEdit" data-idy="<?php echo $komen['ID_DATASETKOMENTAR']?>"><?php echo $komen['SENTIMEN']?></a>
+                            <?php  }
+                            ?>
+                            
+                          </td>
+                        </tr>
+                        <?php }?>
+                      </tbody>  
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+      <!-- Modal Tambah -->
+  <div class="modal fade" id="formTambah" tabindex="-1" role="dialog" aria-labelledby="formTambah" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formTambahJudul">Tambah Data Komentar</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Beri id "pesan-error" untuk menampung pesan error -->
+            <div id="pesan-error-dataset" class="alert alert-danger"></div>
+            <div id="pesan-sukses-dataset" class="alert alert-success"></div>
+            <form class="form-horizontal" id="formbuat">
+              <div class="form-body">
+                  <input type="hidden" id="id_artikel" name="idartikel" value="<?php echo $artikel->ID_ARTIKEL;?>">
+                  <div class="form-group">
+                      <label for="judulartikel"><b>Komentar</b></label>
+                      <textarea type="text" rows="2" class="form-control" id="isikomentar" name="isikomentar" placeholder="Tulis komentar artikel..."></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="thread"><b>Sentimen</b></label>
+                    <select class="form-control" id="sentimen" name="sentimen">
+                      <option value="non-cyberbullying">non-cyberbullying</option>
+                      <option value="cyberbullying">cyberbullying</option>
+                    </select>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary" id="btn-tambah-dataset">Simpan</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal tambah-->
+
+        <!-- Modal Edit -->
+        <div class="modal fade" id="formEdit" tabindex="-1" role="dialog" aria-labelledby="formEdit" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="formEditJudul">Edit Data Komentar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Beri id "pesan-error" untuk menampung pesan error -->
+                <div id="pesan-error-dataset-edit" class="alert alert-danger"></div>
+                <div id="pesan-sukses-dataset-edit" class="alert alert-success"></div>
+                <form class="form-horizontal" id="formbuat">
+                  <div class="form-body">
+                      <input type="hidden" id="iddatasetkomentar-edit" name="idkomentar">
+                      <div class="form-group">
+                          <label for="judulartikel"><b>Komentar</b></label>
+                          <textarea type="text" rows="2" class="form-control" id="isidatasetkomentar-edit" name="isikomentar" placeholder="Tulis komentar artikel..."></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="thread"><b>Sentimen</b></label>
+                        <select class="form-control" id="sentimendatasetkomentar-edit" name="sentimen">
+                          <option class="btn-danger" value="cyberbullying">cyberbullying</option>
+                          <option class="btn-primary" value="non-cyberbullying">non-cyberbullying</option>
+                        </select>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="btn-ubah-dataset">Simpan</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>  
+      <!-- Akhir dari modal Edit-->
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('#pesan-error').hide();
+        $('#pesan-sukses').hide();
+
+        $('#btn-simpan-artikel').on('click', function(){
+          $.ajax({
+                    url: BASE_URL + 'Antibullying/artikel_ubah',
+                    data: $("#formArtikel").serialize(),
+                    method: 'post',
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.status == 'sukses'){
+                          alert(response.pesan);
+                          $('#pesan-sukses').html(response.pesan).fadeIn().delay(3000).fadeOut();
+                          var url = "";
+                          window.setTimeout(function(){ window.location = url; },100);
+                        }else{
+                          alert(response.pesan);
+                          $('#pesan-error').html(response.pesan).fadeIn().delay(3000).fadeOut();
+                        }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) { 
+                        alert(xhr.responseText) 
+                      }
+                  });
+        });
+
+        $('#btn-tutup-dataset').on('click', function(){
+          var url = "";
+          window.setTimeout(function(){ window.location = url; },1000);
+        });
+
+
+          $('#btn-tambah').on('click', function(){
+              $('#pesan-error-dataset').hide();
+              $('#pesan-sukses-dataset').hide();
+              $('#btn-tambah-dataset').on('click', function(){
+                  $.ajax({
+                    url: BASE_URL + 'Antibullying/dataset_komentar_buat',
+                    data: $("#formbuat").serialize(),
+                    method: 'post',
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.status == 'sukses'){
+                          $('#pesan-sukses-dataset').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                          $('#isikomentar').val('');
+                        }else{
+                          $('#pesan-error-dataset').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                        }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) { 
+                        alert(xhr.responseText) 
+                      }
+                  });
+              });
+          });
+
+          $('.ubahkategori').on('click', function(){
+              $('#pesan-error-dataset-edit').hide();
+              $('#pesan-sukses-dataset-edit').hide();
+              const idx = $(this).data('idy');
+              //alert(idx);
+              $.ajax({
+                  url: BASE_URL + 'Antibullying/getdatasetkomentar',
+                  data: {idx : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(data){
+                      $('#iddatasetkomentar-edit').val(data.ID_DATASETKOMENTAR);
+                      $('#isidatasetkomentar-edit').val(data.ISI_KOMENTAR);
+                      $('#sentimendatasetkomentar-edit').val(data.SENTIMEN); 
+
+                      $('#btn-ubah-dataset').on('click', function(){
+                        $.ajax({
+                          url: BASE_URL + 'Antibullying/komentar_ubah',
+                          data: $("#formEdit form").serialize(),
+                          method: 'post',
+                          dataType: 'json',
+                          success: function(response){
+                              if(response.status == 'sukses'){
+                                $('#pesan-sukses-dataset-edit').html(response.pesan).fadeIn().delay(100).fadeOut();
+                                var url = "";
+                                window.setTimeout(function(){ window.location = url; },100);
+                              }else{
+                                $('#pesan-error-dataset-edit').html(response.pesan).fadeIn().delay(100).fadeOut();
+                              }
+                            },
+                              error: function (xhr, ajaxOptions, thrownError) { 
+                                alert(xhr.responseText) 
+                              }
+                          });
+                      });
+
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                  }
+              });
+          });        
+
+    })
+  </script>

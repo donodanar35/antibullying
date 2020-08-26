@@ -1,0 +1,65 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/follower');?>">Pengikut</a>
+      </li>
+    </ol>  
+    
+    <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Kategori -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fa fa-id-card"></i>
+                <b>Daftar Pengikut</b>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                              <tr>
+                                  <th><center>No</center></th>
+                                  <th><center>Nama</center></th>
+                                  <th><center>Total Artikel</center></th>
+                              </tr>
+                      </thead>
+                      <tbody>
+                        <?php $n=1; foreach($pengikut->result() as $following){?>
+                        <tr>
+                          <td><?php echo $n; ?></td>
+                          <td>
+                            <?php
+                              $url_profil = base_url('asset/logo/user.png');
+                              if(empty($following->PHOTO_PROFIL)){
+                            ?>  
+                              <img src="<?php echo $url_profil;?>" alt="Image" class="img-fluidid rounded-circle" width="5%" height="5%">
+                            <?php }else{ ?>
+                              <img src="<?php echo base_url($following->PHOTO_PROFIL) ?>" alt="Image" class="img-fluidid rounded-circle" width="5%" height="5%">
+                            <?php }?>
+                              <a target="_blank"href="<?php echo base_url('Bio/penulis');?>/<?php $first_name = explode(' ', $following->FIRST_NAME); $first_name2 = implode('_', $first_name); echo $first_name2;?>-<?php $last_name = explode(' ', $following->LAST_NAME); $last_name2 = implode('_', $last_name); echo $last_name2; ?>-<?php echo $following->ID;?>"> <?php echo $following->FIRST_NAME . ' ' . $following->LAST_NAME;?></a>
+                          </td>
+                          <td><?php echo $following->POSTING;?></td>
+                        </tr>
+                        <?php $n++;}?>
+                      </tbody>  
+                  </table>
+                </div>
+              </div>
+            </div>  
+          </ol>
+
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+    <!-- Custom js for this page-->
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>"; 
+      })
+    </script>

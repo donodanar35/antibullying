@@ -1,0 +1,77 @@
+<div id="content-wrapper">
+
+    <div class="container-fluid">
+
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('admin/kategori');?>">Kategori</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/kategori_buat');?>">Buat Kategori</a></a></li>
+      </ol>  
+      
+      <!-- Beri id "pesan" untuk menampung pesan error -->
+      <div id="pesan"></div>
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-list"></i>
+                <b>Buat Kategori</b>
+              </div>
+              <div class="card-body">
+
+                  <form id="formBuat" method="POST">
+                      <div class="form-group">
+                        <label for="kategori">Nama Kategori</label>
+                        <input type="text" class="form-control" name="namakategori" id="namakategori" placeholder="Silahkan tulis kategori!">
+                      </div>
+                      <div class="form-group">
+                          <label for="featured">Featured</label>
+                          <select class="form-control" id="featured" name="featured">
+                            <option value="N">Tidak</option>
+                            <option value="Y">Ya</option>
+                          </select>
+                      </div>
+                      <button id="btn-tambah-kategori" type="button" class="btn btn-primary">Simpan</button>
+                  </form>
+
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>       
+    <script type="text/javascript">
+      //kategori
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('#pesan-error-kategori').hide();        
+        $('#btn-tambah-kategori').on('click', function(){
+          $.ajax({
+                  url: BASE_URL + 'Kategori/Kategori_buat',
+                  data: $("#formBuat").serialize(),
+                  method: 'POST',
+                  dataType: 'json',
+                  success: function(response){
+                    //alert(response.pesan + response.status);
+                    if(response.status == 'sukses'){
+                      $('#pesan').html('<div class="alert alert-success">' + response.pesan + '</div>').fadeIn().delay(1000).fadeOut();
+                      $('#formBuat input[type=text]').val('');
+                    }else{
+                      $('#pesan').html('<div class="alert alert-danger">' + response.pesan + '</div>').fadeIn().delay(1000).fadeOut();
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                      alert(xhr.responseText) 
+                    }
+                });
+        });
+    })
+  </script>

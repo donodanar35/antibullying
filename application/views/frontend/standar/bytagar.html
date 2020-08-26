@@ -1,0 +1,49 @@
+<div class="container mt-4">
+  <div class="row">
+
+  </div>
+</div>
+
+  <!-- Page Content -->
+  <div class="container mt-5">
+     
+
+    <!-- Content Row -->
+    <div class="row mb-5">
+      <div class="col-lg-8">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb bg-dark">
+          <li class="breadcrumb-item">
+            <a class="text-light" href="<?php echo base_url('artikel');?>">Tagar </a>
+          </li>
+          <li class="breadcrumb-item active">
+            <a class="text-light" href="<?php echo base_url('artikel/tagar');?>/<?php echo $bytagar; ?>">#<?php echo $bytagar;?></a>
+          </li>
+        </ol>
+        <?php
+          foreach($artikel->result_array() as $pilihan){
+        ?>
+        <div class="card mb-3" style="max-width: 800px;">
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img src="<?php echo base_url() . $pilihan['PHOTO'];?>" class="card-img" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><a href="<?php echo base_url('artikel/detail/');?><?php echo $pilihan['JUDUL_URL'];?>"><?php echo $pilihan['JUDUL'];?></a></h5>
+                <p class="card-text"><?php echo $pilihan['DESKRIPSI_ARTIKEL'];?></p>
+                <p class="card-text"><small class="text-muted">
+                <span class="d-block"><a href="<?php echo base_url('bio/penulis');?>/<?php $first_name = explode(' ', $pilihan['FIRST_NAME']); $first_name2 = implode('_', $first_name); echo $first_name2;?>-<?php $last_name = explode(' ', $pilihan['LAST_NAME']); $last_name2 = implode('_', $last_name); echo $last_name2; ?>-<?php echo $pilihan['ID'];?>"><?php echo $pilihan['FIRST_NAME'] . ' ' . $pilihan['LAST_NAME'];?></a> | <a href="<?php echo base_url('kategori/cari');?>/<?php echo $pilihan['NAMA_KATEGORI'];?>"><?php echo $pilihan['NAMA_KATEGORI'];?></a></span>
+                &bullet;<span class="date-read"><?php echo $pilihan['TANGGAL'];?><br/>
+                &bullet;</span> Dibaca: <?php echo $pilihan['VIEW'];?> &bullet; Rating: <?php echo $pilihan['RATING'] .'/5.0 dari '. $pilihan['JUMLAH_RATING'] . ' voter ';?>&bullet; Komentar: <?php echo $pilihan['TOTAL_KOMENTAR'];?>
+                </small></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <?php }?>
+        <?php 
+          echo $this->pagination->create_links();
+        ?>
+      </div>
+

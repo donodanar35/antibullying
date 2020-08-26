@@ -1,0 +1,116 @@
+<div class="container mt-4">
+    <div class="row">
+  
+    </div>
+  </div>
+  
+    <!-- Page Content -->
+    <div class="container mt-5">
+       
+  
+      <!-- Content Row -->
+      <div class="row">
+        <div class="col-lg-8">
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb bg-transparent mt-3">
+              <li class="breadcrumb-item">
+                <a class="text-black" href="<?php echo base_url();?>">Beranda </a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a class="text-black" href="<?php echo base_url('artikel');?>">Artikel</a>
+              </li>
+            </ol>
+  
+          <?php
+            foreach($artikel->result_array() as $pilihan){
+          ?>
+          <div class="card mb-3" style="max-width: 800px;">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="<?php echo base_url() . $pilihan['PHOTO'];?>" class="card-img" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title"><a href="<?php echo base_url('artikel/detail/');?><?php echo $pilihan['JUDUL_URL'];?>"><?php echo $pilihan['JUDUL'];?></a></h5>
+                  <p class="card-text"><?php echo $pilihan['DESKRIPSI_ARTIKEL'];?></p>
+                  <p class="card-text"><small class="text-muted">
+                  <span class="d-block"><a href="<?php echo base_url('bio/penulis');?>/<?php $first_name = explode(' ', $pilihan['FIRST_NAME']); $first_name2 = implode('_', $first_name); echo $first_name2;?>-<?php $last_name = explode(' ', $pilihan['LAST_NAME']); $last_name2 = implode('_', $last_name); echo $last_name2; ?>-<?php echo $pilihan['ID'];?>"><?php echo $pilihan['FIRST_NAME'] . ' ' . $pilihan['LAST_NAME'];?></a> | <a href="<?php echo base_url('kategori/cari');?>/<?php echo $pilihan['NAMA_KATEGORI'];?>"><?php echo $pilihan['NAMA_KATEGORI'];?></a></span>
+                  &bullet;<span class="date-read"><?php echo $pilihan['TANGGAL'];?><br/>
+                  &bullet;</span> Dibaca: <?php echo $pilihan['VIEW'];?> &bullet; Rating: <?php echo $pilihan['RATING'] .'/5.0 dari '. $pilihan['JUMLAH_RATING'] . ' voter ';?>&bullet; Komentar: <?php echo $pilihan['TOTAL_KOMENTAR'];?>
+                  </small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php }?>
+          <?php 
+            echo $this->pagination->create_links();
+            echo '<br/>'; 
+          ?>
+        </div>
+  
+        <div class="col-md-4">
+
+            <!-- Side Widget -->
+            <div class="card my-4 " style="max-width: 600px;">
+              <h5 class="card-header "><center><b>Artikel Terpopuler</b></center></h5>
+    
+              <?php
+                $n = 1;
+                foreach($artikel_populer as $populer){
+              ?>
+              <div class="card mb-3" style="max-width: 400px;">
+                <div class="row no-gutters">
+                  <div class="col-md-4">
+                    <img src="<?php echo base_url() . $populer['PHOTO'];?>" class="card-img" alt="...">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h6 class="card-title"><a href="<?php echo base_url();?>artikel/detail/<?php echo $populer['JUDUL_URL'];?>"><?php echo $populer['JUDUL'];?></a></h6>
+                      <p class="card-text"><small class="text-muted">
+                        <span class="d-block">
+                          <a href="<?php echo base_url('bio/penulis');?>/<?php $first_name = explode(' ', $populer['FIRST_NAME']); $first_name2 = implode('_', $first_name); echo $first_name2;?>-<?php $last_name = explode(' ', $populer['LAST_NAME']); $last_name2 = implode('_', $last_name); echo $last_name2; ?>-<?php echo $populer['ID'];?>"><?php echo $populer['FIRST_NAME'] . ' ' . $populer['LAST_NAME'];?></a> | <a href="<?php echo base_url('kategori/cari');?>/<?php echo $populer['NAMA_KATEGORI'];?>"><?php echo $populer['NAMA_KATEGORI'];?></a>
+                        </span>
+                        &bullet;<span class="date-read"><?php echo $populer['TANGGAL'];?><br/>
+                        &bullet;</span> Dibaca: <?php echo $populer['TOTAL'];?>
+                        </small>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <?php $n=$n+1; }?>
+            </div>
+    
+            <!-- cari tagar -->
+            <div class="card my-4">
+              <h5 class="card-header"><i class="fa fa-hashtag"></i>
+                <span><b>Tagar Terpopuler</b></span></a>
+              </h5>
+              <div class="card-body">
+                  <form method="POST" action="<?php echo base_url('artikel/tagar');?>">
+                    <div class="input-group">
+                      <input name="tagar" type="text" class="form-control" placeholder="Mencari #tagar..." aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button type="submit" class="btn btn-primary my-2 my-sm-0">
+                            <i class="fas fa-search"></i>
+                          </button>
+                        </div>
+                    </div>
+                  </form>
+                <div class="input-group">
+                  <?php foreach($tagar_populer->result_array() as $tag){ ?>
+                    <a class="btn btn-outline-primary mt-2" href="<?php echo base_url('artikel/tagar');?>/<?php echo $tag['KATA_KUNCI']; ?>">#<?php echo $tag['KATA_KUNCI'];?></a>&nbsp;&nbsp;
+                  <?php }?>
+                </div>
+              </div>
+            </div>
+    
+          </div>
+    
+        </div>
+        <!-- /.row -->
+    
+      </div>
+      <!-- /.container -->
+      

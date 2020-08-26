@@ -1,0 +1,76 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('admin/faq');?>">FAQ</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="#">Buat FAQ</a></li>
+      </ol>  
+      
+      <!-- Beri id "pesan-error" untuk menampung pesan error -->
+      <div id="pesan"></div>
+
+      <a target="_blank" href="<?php echo base_url('FAQ'); ?>" class="btn btn-info mb-3 pull-right">
+        <span class="fa fa-refresh fa-eye">&nbsp;Lihat FAQ</span>
+      </a>
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fa fa-question-circle"></i>
+                <b>Buat FAQ</b>
+              </div>
+              <div class="card-body">
+                  <form id="formBuat" method="POST">                      
+                      <div class="form-group">
+                        <label for="judul"><b>Pertanyaan</b></label>
+                        <input name="pertanyaan" type="text" class="form-control pertanyaan" id="pertanyaan" aria-describedby="pertanyaan" placeholder="Masukkan pertanyaan...">
+                        <small id="judulHelp" class="form-text text-muted">Tulis pertanyaan! Usahakan judul tidak lebih dari 300 karakter.</small>
+                      </div>
+                      <div class="form-group">
+                          <label for="isiartikel"><b>Jawaban</b></label>
+                          <textarea id="mytextarea" form="formBuat" rows="10" name="jawaban" class="form-control tinymce jawaban" required placeholder="tulis jawaban...">
+                          </textarea>
+                          <small id="isiartikelHelp" class="form-text text-muted">Tulis jawaban!</small>
+                      </div>
+                      <button id="btn-simpan" type="button" class="btn btn-primary">Simpan</button>
+                  </form>
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('#btn-simpan').on('click', function(){
+          $.ajax({
+              url: BASE_URL + 'FAQ/buat_faq',
+              data: $("#formBuat").serialize(),
+              method: 'POST',
+              dataType: 'json',
+              success: function(response){
+                if(response.status == 'sukses'){
+                      alert('FAQ berhasil disimpan!');
+                      $('#pesan').html('<div class="alert alert-success">' + response.pesan + "</div>").fadeIn().delay(10000).fadeOut();
+                      $('.pertanyaan').val('');
+                      $('.jawaban').html('');
+                    }else{
+                      alert('Terjadi kesalahan!');
+                      $('#pesan').html('<div class="alert alert-danger">' + response.pesan + '</div>').fadeIn().delay(10000).fadeOut();
+                    }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText) 
+                }
+              });
+        });
+
+    })
+  </script>

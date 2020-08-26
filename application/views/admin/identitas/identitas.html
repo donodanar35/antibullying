@@ -1,0 +1,105 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/identitas');?>">Identitas</a>
+      </li>
+      <li class="breadcrumb-item active">Detail Identitas Website</li>
+    </ol>  
+
+    <!-- Beri id "pesan-error" untuk menampung pesan error -->
+    <div id="pesan-identitas"></div>
+    
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fas fa-certificate"></i>
+              <b>Identitas Website</b> 
+            </div>
+            <div class="card-body">
+              <?php if(isset($identitas)){?>
+                <form id="formBuat" action="<?php echo base_url('identitas/simpan');?>" method="POST">
+                    <input name="ididentitas" value="<?php echo $identitas->ID_IDENTITAS; ?>" class="form-control" type="hidden">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1"><b>Nama Website</b></label>
+                      <input name="namawebsite" value="<?php echo $identitas->NAMA_WEBSITE; ?>" class="form-control" type="text" placeholder="Masukkan nama website...">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail2"><b>Alamat Website</b></label>
+                      <input name="alamatwebsite" value="<?php echo $identitas->ALAMAT_WEBSITE; ?>" class="form-control" type="text" placeholder="Masukkan alamat website...">
+                    </div>
+                    <div class="form-group">
+                        <label for="metaDeskripsi"><b>Meta Deskripsi</b></label>
+                        <textarea name="metadeskripsi" class="form-control"><?php echo $identitas->META_DESKRIPSI; ?></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="metaKeyword"><b>Meta Keyword</b></label>
+                      <textarea name="metakeyword" id="metaKeyword" class="form-control"><?php echo $identitas->META_KEYWORD; ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="kategori"><b>Template</b></label>
+                        <select class="form-control" id="template" name="template">
+                          <?php 
+                            if($identitas->TEMPLATE == 'standar'){
+                          ?>
+                            <option  value="<?php echo $identitas->TEMPLATE;?>" selected="<?php echo $identitas->TEMPLATE;?>">Standar</option>
+                            <option value="meranda">Meranda</option>
+                          <?php
+                            }else if($identitas->TEMPLATE == 'meranda'){
+                          ?>
+                            <option  value="<?php echo $identitas->TEMPLATE;?>" selected="<?php echo $identitas->TEMPLATE;?>">Meranda</option>
+                            <option value="standar">Standar</option>
+                          <?php    
+                            }else{
+                          ?>
+                            <option value="standar">Standar</option>
+                            <option value="meranda">Meranda</option>
+                          <?php }?>
+                          
+                        </select>
+                        <small id="kategoriHelp" class="form-text text-muted">Pilih template frontend website!</small>
+                    </div>
+                    <button id="btn-tambah-identitas" type="button" class="btn btn-primary" name="tombol" value="submit">Simpan</button>
+                </form>
+                <?php }?>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+        </ol>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+        <!-- Custom js for this page-->
+      <script type="text/javascript">
+        //kategori
+        $(document).ready(function(){
+          var BASE_URL = "<?php echo base_url();?>"; 
+          $('#pesan-error-identitas').hide();        
+          $('#btn-tambah-identitas').on('click', function(){
+            $.ajax({
+              url: BASE_URL + 'identitas/simpan',
+              data: $("#formBuat").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status == 'sukses'){
+                  alert(response.pesan);
+                  $('#pesan-identitas').html('<div id="pesan-error-identitas" class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(10000).fadeOut();
+                }else{
+                  alert(response.pesan);
+                  $('#pesan-identitas').html('<div id="pesan-error-identitas" class="alert alert-danger">' + response.pesan + '</div>').fadeIn().delay(10000).fadeOut();
+                }
+              },
+              error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                alert(xhr.responseText) 
+              }                
+            });
+          });
+        })
+      </script>

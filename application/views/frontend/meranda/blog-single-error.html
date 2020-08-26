@@ -1,0 +1,123 @@
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 single-content">
+            <p><b>Mohon maaf. Artikel tidak temukan!</b></p>
+          </div>
+
+          <div class="col-md-4">
+
+            <!-- Side Widget -->
+            <div class="card my-4 " style="max-width: 600px;">
+              <h5 class="card-header "><center><b>Artikel Terpopuler</b></center></h5>
+    
+              <?php
+                $n = 1;
+                foreach($artikel_populer as $populer){
+              ?>
+              <div class="card mb-3" style="max-width: 400px;">
+                <div class="row no-gutters">
+                  <div class="col-md-4">
+                    <img src="<?php echo base_url() . $populer['PHOTO'];?>" class="card-img" alt="...">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h6 class="card-title"><a href="<?php echo base_url();?>artikel/detail/<?php echo $populer['JUDUL_URL'];?>"><?php echo $populer['JUDUL'];?></a></h6>
+                      <p class="card-text"><small class="text-muted">
+                        <span class="d-block">
+                          <a href="<?php echo base_url('bio/penulis');?>/<?php echo $populer['FIRST_NAME'] . '-' . $populer['LAST_NAME'] . '-' . $populer['ID'];?>"><?php echo $populer['FIRST_NAME'] . ' ' . $populer['LAST_NAME'];?></a> | <a href="<?php echo base_url('kategori/cari');?>/<?php echo $populer['NAMA_KATEGORI'];?>"><?php echo $populer['NAMA_KATEGORI'];?></a>
+                        </span>
+                        &bullet;<span class="date-read"><?php echo $populer['TANGGAL'];?><br/>
+                        &bullet;</span> Dibaca: <?php echo $populer['TOTAL'];?>
+                        &bullet;</span> Rating: <?php echo round($populer['RATING'],3);?>  
+                        </small>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <?php $n=$n+1; }?>
+            </div>
+    
+            <!-- cari tagar -->
+            <div class="card my-4">
+              <h5 class="card-header"><i class="fa fa-hashtag"></i>
+                <span><b>Tagar Terpopuler</b></span></a>
+              </h5>
+              <div class="card-body">
+                  <form method="POST" action="<?php echo base_url('artikel/tagar');?>">
+                    <div class="input-group">
+                      <input name="tagar" type="text" class="form-control" placeholder="Mencari #tagar..." aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button type="submit" class="btn btn-primary my-2 my-sm-0">
+                            <i class="fas fa-search"></i>
+                          </button>
+                        </div>
+                    </div>
+                  </form>
+                <div class="input-group">
+                  <?php foreach($tagar_populer->result_array() as $tag){ ?>
+                    <a class="btn btn-outline-primary mt-2" href="<?php echo base_url('artikel/tagar');?>/<?php echo $tag['KATA_KUNCI']; ?>">#<?php echo $tag['KATA_KUNCI'];?></a>&nbsp;&nbsp;
+                  <?php }?>
+                </div>
+              </div>
+            </div>
+    
+          </div>
+
+
+        </div>
+        
+      </div>
+    </div>
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+    <!-- Custom js for this page-->
+
+  <script type="text/javascript">
+    //detail blog
+    $(document).ready(function(){
+      var rating = 0;
+      var BASE_URL = "<?php echo base_url();?>";                 
+      $('#btn-rating').on('click', function(){
+        if($("#rating-input-1-1").is(":checked")){
+          rating = 1;
+          //alert(rating);
+        }else if($("#rating-input-1-2").is(":checked")){
+          rating = 2;
+          //alert(rating);
+        }else if($("#rating-input-1-3").is(":checked")){
+          rating = 3;
+          //alert(rating);
+        }else if($("#rating-input-1-4").is(":checked")){
+          rating = 4;
+          //alert(rating);
+        }else if($("#rating-input-1-5").is(":checked")){
+          rating = 5;
+          //alert(rating);
+        }else{
+          alert("Harap beri rating!");
+        }
+
+        if(rating>0){
+          $.ajax({
+            url: BASE_URL + 'artikel/rating',
+            data: {rating : ratings},
+            method: 'post',
+            dataType: 'json',
+            success: function(data){
+                var path_foto = BASE_URL + data.PHOTO;
+                $('#judul_galeri').html('<strong>' + data.NAMA_GALLERY + '</strong>');
+                $('#keterangan_galeri').html(data.KETERANGAN);
+                $('#foto_galeri').attr('src',path_foto);
+                $('#fotoku').val(path_foto);
+            },
+              error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                alert(xhr.responseText) 
+            }
+        });
+        }
+      });
+
+    })
+</script>

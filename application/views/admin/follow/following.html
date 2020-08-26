@@ -1,0 +1,142 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/following');?>">Mengikuti</a>
+      </li>
+    </ol>  
+    
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-id-card"></i>
+              <b>Daftar Mengikuti</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                            <tr>
+                                <th><center>No</center></th>
+                                <th><center>Nama</center></th>
+                                <th><center>Total Artikel</center></th>
+                                <th><center>Action</center></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                      <?php $n=1; foreach($mengikuti->result() as $following){?>
+                      <tr>
+                        <td><?php echo $n; ?></td>
+                        <td>
+                          <?php
+                            $url_profil = base_url('asset/logo/user.png');
+                            if(empty($following->PHOTO_PROFIL)){
+                          ?>  
+                            <img src="<?php echo $url_profil;?>" alt="Image" class="img-fluidid rounded-circle" width="5%" height="5%">
+                          <?php }else{ ?>
+                            <img src="<?php echo base_url($following->PHOTO_PROFIL) ?>" alt="Image" class="img-fluidid rounded-circle" width="5%" height="5%">
+                          <?php }?>
+                            <a target="_blank"href="<?php echo base_url('Bio/penulis');?>/<?php $first_name = explode(' ', $following->FIRST_NAME); $first_name2 = implode('_', $first_name); echo $first_name2;?>-<?php $last_name = explode(' ', $following->LAST_NAME); $last_name2 = implode('_', $last_name); echo $last_name2; ?>-<?php echo $following->ID;?>"> <?php echo $following->FIRST_NAME . ' ' . $following->LAST_NAME;?></a>
+                        </td>
+                        <td><?php echo $following->POSTING;?></td>
+                        <td>
+                          <center>
+                            <a href="#" role="button" data-toggle="modal" data-target="#ModalHapus" data-idx="<?php echo $following->ID;?>" data-idy="
+                              <?php
+                                $id = 0;
+                                if(empty($_SESSION['user_id'])){
+                                    $id = 0;
+                                }else{
+                                    $id = $_SESSION['user_id'];
+                                }
+                                echo $id;
+                              ?>" data-idz="<?php echo $following->FIRST_NAME . ' ' . $following->LAST_NAME;?>" class="btn btn-outline-danger btn-sm berhenti">Berhenti</a>
+                          </center>
+                        </td>
+                      </tr>
+                      <?php $n++;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+          </div>  
+        </ol>
+
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+
+      <!-- Modal Hapus -->
+      <div class="modal fade" id="ModalHapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="formHapusJudul">Berhenti Mengikuti</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="formberhenti" method="post">
+                  <input type="hidden" id="id_bio" name="id_bio">
+                  <input type="hidden" id="id_user_mengikuti" name="id_user_mengikuti">
+                  <p id="nama_akun"></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-outline-danger berhenti-mengikuti">Berhenti</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>  
+    <!-- Akhir dari modal hapus-->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+    <!-- Custom js for this page-->
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>"; 
+
+        $('.berhenti').on('click', function(){
+          var bio = $(this).data('idx');
+          var mengikuti = $(this).data('idy');
+          var nama_akun = $(this).data('idz');
+          $('#nama_akun').html('Anda yakin berhenti mengikuti akun ' + nama_akun + '?');
+          $('#id_bio').val(bio);
+          $('#id_user_mengikuti').val(mengikuti);
+        });
+
+        $('.berhenti-mengikuti').on('click', function(){
+          $.ajax({
+            url: BASE_URL + 'Bio/aksi',
+            data: $("#formberhenti").serialize(),
+            method: 'post',
+            dataType: 'json',
+            success: function(response){
+              if(response.status=='sukses'){
+                alert(response.pesan);
+                refresh_page();
+              }else{
+                alert(response.pesan);
+                refresh_page();
+              }
+            },
+              error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                alert(xhr.responseText) 
+            }
+          });
+        });
+
+        function refresh_page(){
+          url ="";
+          window.setTimeout(function(){ window.location = url; },1000);
+        }
+
+      })
+    </script>

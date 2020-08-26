@@ -1,0 +1,704 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('Admin/artikel_kelola');?>">Artikel</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="<?php echo base_url('Admin/artikel_ubah/');?><?php echo $artikel->ID_POSTING;?>"><?php echo $artikel->JUDUL;?></a></li>
+      </ol>  
+      
+      <!-- Beri id "pesan-error" untuk menampung pesan error -->
+      <div id="pesan"></div>
+
+      <a target="_blank" href="<?php echo base_url('Artikel/detail') .'/'. $artikel->JUDUL_URL; ?>" class="btn btn-info mb-3 pull-right">
+        <span class="fa fa-refresh fa-eye">&nbsp;Lihat Artikel</span>
+      </a>
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-table"></i>
+                <b>Sunting Artikel</b>
+              </div>
+              <div class="card-body">
+                  <?php if(isset($artikel)){ ?>
+                  <form id="formBuat" method="POST">
+                      <div class="form-group">
+                          <label for="kategori"><b>Headline</b></label>
+                          <div class="form-label-group">
+                              <center>
+                                <img id="gambar" src="<?php echo base_url() . $artikel->PHOTO;?>" width="980" height="980">
+                              </center>
+                              <input type="file" id="fileku" name="file" size="33" />
+                              <small id="judulHelp" class="form-text text-muted">Upload gambar yang akan menjadi headline artikel.</small>
+                          </div>
+                        </div>
+                      
+                      <input type="hidden" value="<?php echo $artikel->ID;?>" name="idpengguna" id="idpengguna" class="form-control">  
+                      <input type="hidden" value="" name="pathfoto" id="pathfoto" class="form-control">
+                      <input name="idposting" type="hidden" class="form-control" id="idposting" value="<?php echo $artikel->ID_POSTING;?>">
+                      <div class="form-group">
+                        <label for="judul"><b>Judul</b></label>
+                        <input value="<?php echo $artikel->JUDUL;?>" name="judul" type="text" class="form-control tinymce" id="judul" aria-describedby="Judul" placeholder="Masukkan judul...">
+                        <small id="judulHelp" class="form-text text-muted">Tulis judul artikel! Usahakan judul tidak lebih dari 160 karakter.</small>
+                      </div>
+                      <div class="form-group">
+                          <label for="kategori"><b>Kategori</b></label>
+                          <select class="form-control" id="kategori" name="kategori">
+                            <?php
+                              foreach($kategori->result_array() as $daftarkategori){
+                            ?>
+                              <option value="<?php echo $daftarkategori['ID_KATEGORI']; ?>">
+                                <?php echo $daftarkategori['NAMA_KATEGORI']; ?>
+                              </option>
+                            <?php }?>
+                          </select>
+                          <small id="kategoriHelp" class="form-text text-muted">Pilih kategori artikel!</small>
+                      </div>
+                      <div class="form-group">
+                        <label for="isiartikel"><b>Deskripsi Artikel</b></label>
+                        <textarea id="deskripsi_artikel" form="formBuat" rows="5" name="deskripsiartikel" class="form-control tinymce" required placeholder="Tulis deskripsi/ ringkasan/ abstraksi/ sinopsis artikel..."><?php echo $artikel->DESKRIPSI_ARTIKEL;?></textarea>
+                        <small id="deksirpsiartikelHelp" class="form-text text-muted">Tulis deskripsi/ ringkasan/ abstraksi/ sinopsis artikel! Usahakan deskripsi artikel tidak lebih dari 160 karakter.</small>
+                      </div>
+                      <div class="form-group">
+                          <label for="isiartikel"><b>Isi Artikel</b></label>
+                          <textarea id="mytextarea" form="formBuat" rows="20" name="isiartikel" class="form-control tinymce" required placeholder="tulis isi artikel...">
+                              <?php echo $artikel->ISI_ARTIKEL;?>
+                          </textarea>
+                          <small id="isiartikelHelp" class="form-text text-muted">Tulis isi lengkap artikel!</small>
+                      </div>
+                      <div class="form-group">
+                        <label for="judul"><b>Kata Kunci</b></label>
+                        <input value="<?php echo $artikel->KATA_KUNCI;?>" name="katakunci" type="text" class="form-control tinymce" id="katakunci" aria-describedby="Judul" placeholder="Masukkan kata kunci...">
+                        <small id="katakunciHelp" class="form-text text-muted">Tulislah kata kunci artikel! Usahakan kata kunci tidak lebih 7 kata. Pisahkan setiap kata kunci dengan tanda koma (,)</small>
+                      </div>
+                      <button id="btn-simpan-artikel" type="button" class="btn btn-primary">Simpan</button>
+                  </form>
+                  <?php }?>
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+
+          <!-- DataTables Tabel Rating -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+              <b>Daftar Rating Artikel</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th><center>No</center></th>
+                        <th><center>Tanggal</center></th>
+                        <th><center>Rating</center></th>
+                        <th><center>Penilai</center></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                        $n = 1;
+                        foreach($rating->result_array() as $rate){
+                      ?>
+                      <tr>
+                        <td><?php echo $n;?></td>
+                        <td><?php echo $rate['TANGGAL_RATING'];?></td>
+                        <td><?php echo $rate['RATING'];?></td>
+                        <td>
+                          <a href="<?php echo base_url('Bio/penulis/') .$rate['FIRST_NAME'].'-'.$rate['LAST_NAME'].'-'.$rate['ID'];?>"><?php echo $rate['FIRST_NAME'] .' '. $rate['LAST_NAME'];?></a>
+                        </td>
+                      </tr>
+                      <?php $n++;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+
+          <br/>
+          <!-- DataTables Tabel Komentar -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+              <b>Daftar Komentar Artikel</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable_1" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th><center>No</center></th>
+                        <th><center>Tanggal</center></th>
+                        <th><center>Komentar</center></th>
+                        <th><center>Pengirim</center></th>
+                        <th><center>Sentimen</center></th>
+                        <th><center>Dilaporkan</center></th>
+                        <th><center>Action</center></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                        $n = 1;
+                        foreach($komentar->result_array() as $komen){
+                      ?>
+                      <tr>
+                        <td><?php echo $n;?></td>
+                        <td><?php echo $komen['TANGGAL_KOMENTAR'];?></td>
+                        <td><a href="<?php echo base_url('Admin') .'/artikel_komentar/'. $artikel->ID_POSTING .'/'. $komen['ID_KOMENTAR'];?>"><?php echo $komen['KOMENTAR'];?></a></td>
+                        <td><a href="<?php echo base_url('Bio/penulis/') .$komen['FIRST_NAME'].'-'.$komen['LAST_NAME'].'-'.$komen['ID'];?>"><?php echo $komen['FIRST_NAME'] .' '. $komen['LAST_NAME'];?></a></td>
+                        <td>
+                          <?php 
+                            if($komen['SENTIMEN']=='non-cyberbullying'){
+                          ?>  
+                            <a href="#" class="btn btn-info konfir-periksa" data-toggle="modal" data-target="#ModalPeriksa" data-idy="<?php echo $komen['ID_KOMENTAR']; ?>" data-id="<?php echo $komen['KOMENTAR']; ?>">nonbully</a> 
+                          <?php
+                            }else{
+                          ?>
+                            <a href="#" class="btn btn-danger konfir-periksa" data-toggle="modal" data-target="#ModalPeriksa" data-idy="<?php echo $komen['ID_KOMENTAR']; ?>" data-id="<?php echo $komen['KOMENTAR']; ?>"><?php echo $komen['SENTIMEN'];?></a>   
+                          <?php
+                            }
+                          ?> 
+                        </td>
+                        <td>
+                          <?php 
+                            if($komen['LAPORKAN'] =="Y"){
+                          ?>
+                            <a href="#" class="btn btn-warning konfir-laporkan" data-toggle="modal" data-target="#formLaporkan" data-id="<?php echo $komen['ID_KOMENTAR']; ?>" data-idx="<?php echo $komen['KOMENTAR']; ?>" data-idy="<?php echo $komen['PELANGGARAN']; ?>" data-idz="<?php echo $komen['KETERANGAN']; ?>" data-ida="<?php echo $komen['TANGGAL_PELAPORAN']; ?>" data-idb="<?php echo $komen['SENTIMEN']; ?>" data-idc="<?php echo $komen['LAPORKAN']; ?>" data-idd="<?php echo $komen['AKTIF']; ?>">Dilaporkan</a>
+                          <?php }?>
+                        </td>
+                        <td>
+                          <center>
+                              <a href="#" class="btn btn-primary konfir-balas" data-toggle="modal" data-target="#formPesanBalasan" data-id="<?php echo $komen['ID_KOMENTAR']; ?>" data-idy="<?php echo $komen['FIRST_NAME'] .' '. $komen['LAST_NAME'];?>" data-idz="<?php echo base_url('bio/penulis/') . $komen['FIRST_NAME'] .'-'. $komen['LAST_NAME'] .'-'. $komen['ID'];?>" data-ida="<?php echo $komen['FIRST_NAME'];?>" data-idb="<?php echo $komen['LAST_NAME'];?>" data-idc="<?php echo $komen['ID'];?>">Balas</a>
+                            <a href="#" class="btn btn-danger konfir-hapus" data-toggle="modal" data-target="#formHapus" data-idy="<?php echo $komen['ID_KOMENTAR']; ?>">Hapus</a>
+                          </center>
+                      </td>
+                      </tr>
+                      <?php $n++;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+<!-- Modal Hapus -->
+<div class="modal fade" id="formHapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formHapusJudul">Konfirmasi Hapus Komentar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Beri "pesan" untuk menampung pesan error -->
+        <div id="pesan-error-hapus" class="alert alert-danger"></div>
+        <div id="pesan-sukses-hapus" class="alert alert-success"></div>
+        <p>Anda yakin mau menghapus data komentar?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+        <button type="submit" class="btn btn-primary" id="btn-hapus">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal hapus-->
+
+<!-- Modal Periksa -->
+<div class="modal fade" id="ModalPeriksa" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formHapusJudul">Periksa Sentimen Komentar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Beri "pesan" untuk menampung pesan error -->
+          <div class="pesan"></div>
+          <p id="periksa-komentar"></p>
+          <form id="formPeriksa" method="POST">
+              <input name="idkomentar" id="idkomentar" type="hidden" value="0">
+              <input name="komentar" id="isikomentar" type="hidden" value="0">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary" id="btn-periksa">Periksa</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <!-- Akhir dari modal periksa-->
+
+
+              <!-- Modal Laporkan -->
+              <div class="modal fade bd-example-modal-xl" id="formLaporkan" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="formModalEditLabel">Pelaporan Komentar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <!-- Beri id "pesan" untuk menampung pesan error -->
+                        <div id="pesan"></div>
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect2"><b>Komentar: </b></label>
+                          <textarea class="form-control" name="komentar" id="komentar-laporan" rows="2"></textarea>
+                        </div>
+                        <form id="formKirimLaporkan" method="post">
+                          <input name="idkomentar" id="idkomentar-pelaporan" type="hidden" value="0">
+                          <input name="sentimen" id="sentimen-pelaporan" type="hidden" value="0">
+                          <div class="form-group">
+                            <label id="tanggalpelaporan" for="exampleFormControlSelect2"></label>
+                          </div>
+                          <div class="form-group">
+                            <b>Sentimen: </b>  
+                            <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="sentimen" id="sentimen-cyberbullying" value="cyberbullying">
+                              <label class="form-check-label" for="inlineRadio1">cyberbullying</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="sentimen" id="sentimen-noncyberbullying" value="non-cyberbullying">
+                              <label class="form-check-label" for="inlineRadio2">non-cyberbullying</label>
+                            </div>
+                              <b>Dilaporkan: </b> 
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="lapor" id="lapor-ya" value="Y">
+                                  <label class="form-check-label" for="inlineRadio1">Ya</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="lapor" id="lapor-tidak" value="N">
+                                  <label class="form-check-label" for="inlineRadio2">Tidak</label>
+                              </div>
+                              <b>Dihapus: </b>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="aktif" id="aktif-ya" value="Y">
+                                  <label class="form-check-label" for="inlineRadio1">Tidak</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="aktif" id="aktif-tidak" value="N">
+                                  <label class="form-check-label" for="inlineRadio2">Ya</label>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleFormControlSelect2">Jenis Pelanggaran: </label>
+                            <select multiple class="form-control" name="pelanggaran" id="pelanggaran">
+                              <option value="perundungan">Perundungan (cyberbullying)</option>
+                              <option value="provokatif">Provokasi</option>
+                              <option value="pornografi">Pornografi</option>
+                              <option value="ujaran-kebencian">Ujaran kebencian SARA</option>
+                              <option value="promosi-terselubung">Promosi terselubung</option>
+                              <option value="hoaks">Hoaks</option>
+                              <option value="spam">Spam</option>
+                              <option value="tulisan-jelek">Tulisan tidak baku</option>
+                              <option value="lainnya">Lainnya</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleFormControlTextarea1"><b>Keterangan Pelanggaran: </b> </label>
+                            <textarea class="form-control keterangan" name="keterangan" id="keterangan" rows="1"></textarea>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary fa fa-window-close btn-tutup" data-dismiss="modal"> Tutup </button>
+                        <button type="button" id="btn-kirim-laporkan" class="btn btn-primary"> Proses </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>  
+                <!-- Akhir dari modal lapor-->  
+
+                <!-- Modal Pesan Balasan -->
+                <div class="modal fade bd-example-modal-xl" id="formPesanBalasan" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="formModalEditLabel">Balas Komentar</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Beri id "pesan" untuk menampung pesan error -->
+                          <div id="pesan-formBalasan"></div>
+                          <div class="form-group">
+                            <label for="exampleFormControlSelect2"><b>Kepada: </b><a target="_blank" id="url-bio" ><b id="nama-depan"></b><b id="nama-belakang"></b></a></label>
+                          </div>
+                          <form id="formBalasan" method="post">
+                            <input name="url" id="url" type="hidden" value="0">
+                            <input name="nama_lengkap" id="nama-lengkap" type="hidden" value="0">
+                            <input name="idkomentar" id="id-balasan" type="hidden" value="0">
+                            <div class="form-group">
+                              <label for="exampleFormControlTextarea1"><b>Pesan: </b> </label>
+                              <textarea class="form-control" name="komentar" id="pesan-balasan" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary fa fa-window-close btn-tutup" data-dismiss="modal"> Tutup </button>
+                          <button type="button" id="btn-kirim-balasan" class="btn btn-primary"> Kirim </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>  
+                  <!-- Akhir dari modal pesan balasan-->
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+    <script type="text/javascript">
+      
+      
+      //buat artikel
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('#myTable_Komentar').DataTable();
+        $('#myTable_Rating').DataTable();
+
+        $('.konfir-hapus').on('click', function(){
+          $('#pesan-error-hapus').hide();
+          $('#pesan-sukses-hapus').hide();
+          const idy = $(this).data('idy');
+          $('#btn-hapus').on('click', function(){
+            $('#btn-hapus').attr('disabled','disabled');
+            $.ajax({
+                  url: BASE_URL + 'Artikel/hapus_komentar',
+                  method: 'post',
+                  data: {id : idy},
+                  dataType: 'json',
+                  success: function(response){
+                    if(response.status="sukses"){
+                      $('#btn-hapus').removeAttr('disabled');
+                      alert(response.pesan);
+                      $('#pesan-sukses-hapus').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                    }else{
+                      $('#btn-hapus').removeAttr('disabled');
+                      alert(response.pesan);
+                      $('#pesan-error-hapus').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+      $('#detail-komentar').on('click', function(){
+          var idx = $(this).data('id');
+          $('#tabel-balasan').DataTable( {
+          "processing": false,
+          "serverSide": false,
+          "ajax": {
+            "url": BASE_URL+ "Artikel/get_balasan",
+            "type":"POST",
+            "data" : {id : idx}
+          },
+          "columnDefs": [{
+            "targets":[-1],
+            "orderable":"true",
+          },       
+          ],
+        });
+
+      });
+
+      $('.konfir-balasan').on('click', function(){
+        var idx = $(this).data('id');
+        alert(idx);
+      });
+
+
+        $('.konfir-laporkan').on('click', function(){
+          $('#pelanggaran option[value="perundungan"]').removeAttr('selected');
+          $('#pelanggaran option[value="promosi-terselubung"]').removeAttr('selected');
+          $('#pelanggaran option[value="spam"]').removeAttr('selected');
+          $('#pelanggaran option[value="hoaks"]').removeAttr('selected');
+          $('#pelanggaran option[value="tulisan-jelek"]').removeAttr('selected');
+          $('#pelanggaran option[value="provokatif"]').removeAttr('selected');
+          $('#pelanggaran option[value="ujaran-kebencian"]').removeAttr('selected');
+          $('#pelanggaran option[value="pornografi"]').removeAttr('selected');
+          $('#pelanggaran option[value="lainnya"]').removeAttr('selected');
+          var id = "";
+          var idx = "";
+          var idy = "";
+          var idz = "";
+          var ida = "";
+          var idb = "";
+          var idc = "";
+          var idd = "";
+          var id = $(this).data('id');
+          var idx = $(this).data('idx');
+          var idy = $(this).data('idy');
+          var idz = $(this).data('idz');
+          var ida = $(this).data('ida');
+          var idb = $(this).data('idb');
+          var idc = $(this).data('idc');
+          var idd = $(this).data('idd');
+          $('#idkomentar-pelaporan').val(id);
+          $('#komentar-laporan').html(idx);
+          $('#keterangan').val(idz);
+          $('#tanggalpelaporan').html(ida);
+          if(idy=="perundungan"){
+            $('#pelanggaran option[value="perundungan"]').attr('selected','selected');
+          }else if(idy=="promosi-terselubung"){
+            $('#pelanggaran option[value="promosi-terselubung"]').attr('selected','selected');
+          }else if(idy=="spam"){
+            $('#pelanggaran option[value="spam"]').attr('selected','selected');
+          }else if(idy=="hoaks"){
+            $('#pelanggaran option[value="hoaks"]').attr('selected','selected');
+          }else if(idy=="tulisan-jelek"){
+            $('#pelanggaran option[value="tulisan-jelek"]').attr('selected','selected');
+          }else if(idy=="provokatif"){
+            $('#pelanggaran option[value="provokatif"]').attr('selected','selected');
+          }else if(idy=="ujaran-kebencian"){
+            $('#pelanggaran option[value="ujaran-kebencian"]').attr('selected','selected');
+          }else if(idy=="pornografi"){
+            $('#pelanggaran option[value="pornografi"]').attr('selected','selected');
+          }else if(idy=="lainnya"){
+            $('#pelanggaran option[value="lainnya"]').attr('selected','selected');
+          }
+
+          if(idb=="cyberbullying"){
+            $('#sentimen-cyberbullying').attr('checked','checked');
+          }else if(idb=="non-cyberbullying"){
+            $('#sentimen-noncyberbullying').attr('checked','checked');
+          }
+
+          if(idc=="Y"){
+            $('#lapor-ya').attr('checked','checked');
+          }else if(idc=="N"){
+            $('#lapor-tidak').attr('checked','checked');
+          }
+
+          if(idd=="Y"){
+            $('#aktif-ya').attr('checked','checked');
+          }else if(idd=="N"){
+            $('#aktif-tidak').attr('checked','checked');
+          }
+      });
+
+          $('#btn-kirim-laporkan').on('click', function(){
+            var r = confirm("Lanjut proses komentar ini?");
+                if(r == true){
+                  $.ajax({
+                    url: BASE_URL + 'Artikel/hapus_pelaporan',
+                    method: 'post',
+                    data: $("#formKirimLaporkan").serialize(),
+                    dataType: 'json',
+                    success: function(response){
+                      if(response.status="sukses"){
+                        alert("Terima kasih telah membantu kami dalam mengatasi cyber-bullying");
+                        $('.pesan').html('<div class="alert alert-success">' + response.pesan +"</div>").fadeIn().delay(1000).fadeOut();
+                      }else{
+                        alert(response.pesan);
+                        $('.pesan').html('<div class="alert alert-danger">' + response.pesan +"</div>").fadeIn().delay(1000).fadeOut();
+                      }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                        alert(xhr.responseText) 
+                          }          
+                  });
+
+                }
+          });
+
+        $('.konfir-periksa').on('click', function(){
+          var idy = $(this).data('idy');
+          var komentar = $(this).data('id');
+          $('#periksa-komentar').html(komentar);
+          $('#isikomentar').val(komentar);
+          $('#idkomentar').val(idy);
+          
+          $('#btn-periksa').on('click', function(){
+            $.ajax({
+            url: BASE_URL + 'Antibullying/kalkuasi_sentimen',
+            data: $("#formPeriksa").serialize(),
+            method: 'post',
+            dataType: 'json',
+            success: function(response){
+              idkomen = $('#idkomentar').val();
+              if(response.pesan =="cyberbullying"){
+                var r = confirm("Komentar ini berpotensi mengandung cyberbullying, Anda yakin mau menghapusnya?");
+                if(r == true){
+                  $.ajax({
+                    url: BASE_URL + 'Artikel/hapus_komentarbully',
+                    method: 'post',
+                    data: {id : idkomen},
+                    dataType: 'json',
+                    success: function(response){
+                      if(response.status="sukses"){
+                        $('#btn-periksa').removeAttr('disabled');
+                        alert("Terima kasih telah membantu kami dalam mengatasi cyber-bullying");
+                        $('.pesan').html('<div class="alert alert-success">' + response.pesan +"</div>").fadeIn().delay(1000).fadeOut();
+                      }else{
+                        $('#btn-periksa').removeAttr('disabled');
+                        alert(response.pesan);
+                        $('.pesan').html('<div class="alert alert-danger">' + response.pesan +"</div>").fadeIn().delay(1000).fadeOut();
+                      }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.responseText) 
+                      }          
+                  });
+
+                }
+              }else{
+                alert(response.pesan);
+              }
+            },
+              error: function (xhr, ajaxOptions, thrownError) { 
+                alert(xhr.responseText);
+                console.log(xhr.responseText);
+              }
+            });    
+          });
+
+        });
+
+        $('#btn-simpan-artikel').on('click', function(){
+          $.ajax({
+                  url: BASE_URL + 'Artikel/artikel_ubah',
+                  data: $("#formBuat").serialize(),
+                  method: 'POST',
+                  dataType: 'json',
+                  success: function(response){
+                    //alert(response.pesan + response.status);
+                    if(response.status == 'sukses'){
+                      $('#pesan').html('<div class="alert alert-success">' + response.pesan + "</div>").fadeIn().delay(10000).fadeOut();
+                      alert('Artikel berhasil disimpan!');
+                    }else{
+                      $('#pesan').html('<div class="alert alert-danger">' + response.pesan + '</div>').fadeIn().delay(10000).fadeOut();
+                      alert('Terjadi kesalahan!');
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }
+                });
+        });
+
+                $('#fileku').on('change', function () {
+                    var BASE_URL = "<?php echo base_url();?>";
+                    var file_data = $('#fileku').prop('files')[0];
+                    var form_data = new FormData();
+                    form_data.append('file', file_data);
+                    $.ajax({
+                        url: BASE_URL + 'Artikel/upload_file', 
+                        dataType: 'text', 
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                            $('#pathfoto').val(response); 
+                            var path_foto = BASE_URL + response;
+                            $('#gambar').attr('src',path_foto);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                          alert(xhr.responseText); 
+                        }
+                    });
+                });
+
+        $('.btn-tutup').on('click', function(){
+          var url = "";
+          window.setTimeout(function(){ window.location = url; },1000);
+        });
+
+      $('.konfir-balas').on('click', function(){
+        var id = $(this).data('id');
+        var ida = $(this).data('ida');
+        var idb = $(this).data('idb');
+        var idz = $(this).data('idz');
+        $('#nama-depan').html(ida + ' ');
+        $('#nama-belakang').html(idb);
+        $('#url-bio').attr('href',idz);
+        $('#url').val(idz);
+        $('#nama-lengkap').val(ida + ' ' + idb);
+        $('#id-balasan').val(id);
+      });
+
+      $('#btn-kirim-balasan').on('click', function(){
+        $.ajax({
+          url: BASE_URL + 'Antibullying/kalkuasi_sentimen',
+          method: 'post',
+          dataType: 'json',
+          data: $("#formBalasan").serialize(),
+          success: function(response){
+            if(response.pesan=="cyberbullying"){
+              var r = confirm("Komentar Anda berpotensi mengandung cyberbullying, yakin lanjut?");
+              if(r == true){
+                $.ajax({
+                  url: BASE_URL + 'Artikel/kirim_balasan_admin',
+                  data: $("#formBalasan").serialize(),
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    if(response.status=="sukses"){
+                      $('#pesan-formBalasan').html('<div class="alert alert-success">' +response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                      refresh_page();
+                      $('#pesan-balasan').val('');
+                    }else{
+                      $('#pesan-formBalasan').html('<div class="alert alert-danger">' +response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                    }                  
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                      alert(xhr.responseText);
+                      console.log(xhr.responseText);
+                  }
+                });
+                alert("Komentar Anda telah diteruskan. Anda sepenuhnya bertanggungjawab atas segala potensi bahaya dan risiko beserta implikasi delik hukumnya.");
+              } else {
+                $('#pesan-balasan').val('');
+                alert("Terima kasih telah mendukung kami dalam mengatasi cyber-bullying.");
+              }
+            }else{
+              $.ajax({
+                url: BASE_URL + 'Artikel/kirim_balasan_admin',
+                data: $("#formBalasan").serialize(),
+                method: 'post',
+                dataType: 'json',
+                success: function(response){
+                  if(response.status=="sukses"){
+                      $('#pesan-formBalasan').html('<div class="alert alert-success">' +response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                      refresh_page();
+                      $('#pesan-balasan').val('');
+                    }else{
+                      $('#pesan-formBalasan').html('<div class="alert alert-danger">' +response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                    }
+                },
+                  error: function (xhr, ajaxOptions, thrownError) { 
+                    alert(xhr.responseText);
+                    console.log(xhr.responseText);
+                }
+              });
+            }
+          },
+            error: function (xhr, ajaxOptions, thrownError) { 
+              alert(xhr.responseText) 
+            }          
+          });
+      });
+
+    })
+  </script>

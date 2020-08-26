@@ -1,0 +1,190 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/faq');?>">FAQ</a>
+      </li>
+    </ol>  
+    
+    <a href="<?php echo base_url('admin/faq_buat');?>" class="btn btn-success mb-3">Tambah Pertanyaan</a><br/>
+
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-question-circle"></i>
+              <b>Sunting FAQ</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                            <tr>
+                                <th><center>No</center></th>
+                                <th><center>Diperbarui</center></th>
+                                <th><center>Pertanyaan</center></th>
+                                <th><center>Action</center></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                      <?php $n=1;
+                        foreach($faq->result_array() as $d){
+                      ?>
+                        <tr>
+                          <td><?php echo $n;?></td>
+                          <td><?php echo $d['TANGGAL'];?></td>
+                          <td>
+                            <a href="<?php echo base_url('admin/faq_ubah');?>/<?php echo $d['ID_FAQ']; ?>"><?php echo $d['PERTANYAAN'];?></a>
+                          </td>
+                        <td>
+                          <center>
+                              <a href="#" class="btn btn-danger konfir-hapus" data-toggle="modal" data-target="#modalhapus" data-idx="<?= $d['ID_FAQ'];?>" data-idy="<?= $d['PERTANYAAN'];?>" >Hapus</a>
+                          </center>
+                        </td>
+                        </tr>
+                        <?php $n++;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+        </ol>
+    </div>
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formHapusJudul">Hapus Tagar</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="pesan"></div>
+            <form method="post" id="formhapus">
+                <input type="hidden" id="idfaq" name="id">
+                <p id="faq-hapus"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-danger btn-hapus">Hapus</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal hapus-->
+
+  <!-- Modal Tambah -->
+  <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog" aria-labelledby="judulModalTambah" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formModalTambahLabel">Tambah #Tagar</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="pesan"></div>
+            <form method="POST" id="formtambah">
+                <div class="form-group">
+                    <label for="namakategori">#Tagar (Kata Kunci Artikel):</label>
+                    <input type="text" class="form-control" id="katakunci-tambah" name="katakunci" placeholder="Nama #tagar...">
+                </div>
+                <div class="form-group">
+                    <label for="namakategori">Diakses (Total Dikunjungi):</label>
+                    <input type="text" class="form-control" id="katakunci-tambah" name="total" placeholder="Total diakses...">
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary btn-tambah">Simpan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal tambah-->
+
+<!-- Modal Edit -->
+<div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="judulModalEdit" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formModalEditLabel">Edit Tagar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="pesan"></div>
+          <form id="formedit" method="post">
+              <input type="hidden" id="id-edit" name="id">
+              <div class="form-group">
+                  <label for="namakategori">#Tagar (Kata Kunci Artikel):</label>
+                  <input type="text" class="form-control" id="katakunci-edit" name="katakunci">
+              </div>
+              <div class="form-group">
+                  <label for="namakategori">Diakses (Total Diakses):</label>
+                  <input type="text" class="form-control" id="total-edit" name="total">
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-primary btn-edit">Ubah</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+<!-- Akhir dari modal edit-->
+
+  </div>
+  <!-- /.container-fluid -->
+ 
+  <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+  <script type="text/javascript">
+  $(document).ready(function(){
+    var BASE_URL = "<?php echo base_url();?>";
+
+    $('.konfir-hapus').on('click', function(){
+      var idx = $(this).data('idx');
+      var tanya = $(this).data('idy');
+      $('#idfaq').val(idx);
+      $('#faq-hapus').html('FAQ: <br/>' + tanya + '<br/><p> Anda yakin mau menghapusnya?</p>');
+      $('.btn-hapus').on('click',function(){
+          $.ajax({
+              url: BASE_URL + 'faq/hapus_faq',
+              data: {id: idx},
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    $('.btn-tutup').on('click', function(){
+      url ="";
+      window.setTimeout(function(){ window.location = url; },1000);
+    });
+
+  });
+  </script>

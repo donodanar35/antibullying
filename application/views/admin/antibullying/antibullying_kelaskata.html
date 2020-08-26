@@ -1,0 +1,448 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('Admin/antibullying_kelaskata');?>">Naive Bayes Model</a>
+      </li>
+    </ol>  
+    
+    <a id="btn-model" href="#" class="btn btn-success mb-3 pull-right konfir-model-antibullying" data-toggle="modal" data-target="#formModel">
+      <span class="glyphicon glyphicon-plus"></span> &nbsp;Buat Model Antibullying
+    </a>
+
+    <a id="btn-model" href="#" class="btn btn-danger mb-3 pull-right konfir-hapus-model-antibullying" data-toggle="modal" data-target="#formModel2">
+      <span class="glyphicon glyphicon-plus"></span> &nbsp;Hapus Model Antibullying
+    </a>
+
+    <a id="btn-model" href="#" class="btn btn-info mb-3 pull-right konfir-hapus-null" data-toggle="modal" data-target="#formModel3">
+      <span class="glyphicon glyphicon-plus"></span> &nbsp;Bersihkan Dataset Null
+    </a>
+
+    <a id="btn-model" href="#" class="btn btn-warning mb-3 pull-right konfir-split-data" data-toggle="modal" data-target="#formModel4">
+      <span class="glyphicon glyphicon-plus"></span> &nbsp;Split Data
+    </a>
+
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fas fa-comments"></i>
+              <b>Tabel Prior</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="tabel-prior" width="100%" cellspacing="0">
+                    <thead>
+                            <tr>
+                                <th><center>ID</center></th>
+                                <th><center>Diperbarui</center></th>
+                                <th><center>Jenis</center></th>
+                                <th><center>Kelas</center></th>
+                                <th><center>ΣKelas Data</center></th>
+                                <th><center>ΣSeluruh Data</center></th>
+                                <th><center>Probabilitas</center></th>
+                                <th><center>ΣKelas Kata</center></th>
+                                <th><center>ΣKata Unik</center></th>
+                                <th><center>Σ(Unik dan Kelas)</center></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          </div>  
+        </ol>
+
+        <ol class="breadcrumb">
+          <div class="container">
+                <!-- DataTables Tabel Kategori -->
+                <div class="card mb-12">
+                  <div class="card-header">
+                    <i class="fas fa-comments"></i>
+                    <b>Tabel Kelas Kata</b>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered" id="tabel-kelas" width="100%" cellspacing="0">
+                          <thead>
+                                  <tr>
+                                      <th><center>ID</center></th>
+                                      <th><center>Diperbarui</center></th>
+                                      <th><center>Kata</center></th>
+                                      <th><center>Σ(Kata|Cyberbullying)</center></th>
+                                      <th><center>Σ(Kata|Non-cyberbullying)</center></th>
+                                      <th><center>P(Kata|Cyberbullying)</center></th>
+                                      <th><center>P(Kata|Non-cyberbullying)</center></th>
+                                  </tr>
+                          </thead>
+                          <tbody>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tbody>  
+                      </table>
+                    </div>
+                  </div>
+                  <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+                </div>  
+              </ol>
+    </div>
+
+<!-- Modal Konfir Antibullying Model-->
+<div class="modal fade" id="formModel" tabindex="-1" role="dialog" aria-labelledby="formKonfirNormalisasi" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formKonfirNormalisasiJudul">Hapus Kategori</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            <p></p>
+            <div class="progress">
+              <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+        <button disabled type="button" class="btn btn-primary proses" id="btn-proses-normalisasi">Proses</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal konfir Antibullying Model-->
+
+<!-- Modal Konfir Bersihkan NUll-->
+<div class="modal fade" id="formModel3" tabindex="-1" role="dialog" aria-labelledby="formKonfirNormalisasi" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formKonfirNormalisasiJudul3">Hapus Kategori</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            <div class="form-group">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="judulkolom">Ditemukan dataset null:</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input disabled type="text" class="form-control" id="jmlnull" name="jmlnull">
+                  </div>
+                </div>
+              </div>
+            <p></p>
+            <div class="progress">
+              <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+        <button disabled type="button" class="btn btn-danger proses" id="btn-proses-normalisasi3">Hapus</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal bersihkan null -->
+
+<!-- Modal Konfir split data-->
+<div class="modal fade" id="formModel4" tabindex="-1" role="dialog" aria-labelledby="formKonfirNormalisasi" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formKonfirNormalisasiJudul4">Hapus Kategori</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Beri id "pesan-error" untuk menampung pesan-->
+          <div id="pesan-error-tambah" class="alert alert-danger"></div>
+          <div id="pesan-sukses-tambah" class="alert alert-success"></div>
+          <form method="POST" id="formsplit">
+              <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="judulkolom">Total dataset:</label>
+                    </div>
+                    <div class="col-md-6">
+                      <input disabled type="text" class="form-control" id="totaldataset" name="totaldataset">
+                    </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="judulkolom">Total cyberbullying:</label>
+                    </div>
+                    <div class="col-md-6">
+                      <input disabled type="text" class="form-control" id="totalcyberbullying" name="totalcyberbullying">
+                    </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="judulkolom">Total non-cyberbullying:</label>
+                    </div>
+                    <div class="col-md-6">
+                      <input disabled type="text" class="form-control" id="totalnoncyberbullying" name="totalnoncyberbullying">
+                    </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="judulkolom">Split data testing (%):</label>
+                    </div>
+                    <div class="col-md-6">
+                      <input type="number" class="form-control" id="splitdatatesting" name="splitdatatesting">
+                    </div>
+                  </div>
+              </div>
+              <div class="progress">
+                <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+          <button disabled type="button" class="btn btn-warning proses" id="btn-proses-normalisasi4">Split</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <!-- Akhir dari modal bersihkan null -->
+
+<!-- Modal Konfir Hapus Antibullying Model-->
+<div class="modal fade" id="formModel2" tabindex="-1" role="dialog" aria-labelledby="formKonfirNormalisasi" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formKonfirNormalisasiJudul2">Hapus Kategori</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            <p></p>
+            <div class="progress">
+              <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup-dataset" data-dismiss="modal">Tutup</button>
+        <button disabled type="button" class="btn btn-danger proses" id="btn-proses-normalisasi2">Hapus</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal konfir Hapus Antibullying Model-->
+
+  </div>
+  <!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+    <script type="text/javascript">
+        //kategori
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>"; 
+
+        $('.btn-tutup-dataset').on('click', function(){
+          var url = "";
+          window.setTimeout(function(){ window.location = url; },1000);
+        });
+
+        $('#tabel-prior').DataTable( {
+          "processing": false,
+          "serverSide": false,
+          "ajax": {
+            "url": BASE_URL+ "Antibullying/get_prior",
+            "type":"POST"
+          },
+          "columnDefs": [{
+            "targets":[-1],
+            "orderable":"true",
+          },       
+          ],
+        });
+
+        $('#tabel-kelas').DataTable( {
+          "processing": false,
+          "serverSide": false,
+          "ajax": {
+            "url": BASE_URL+ "Antibullying/get_kelaskata",
+            "type":"POST"
+          },
+          "columnDefs": [{
+            "targets":[-1],
+            "orderable":"true",
+          },       
+          ],
+        });
+
+        $('.konfir-model-antibullying').on('click', function(){
+          $('#btn-proses-normalisasi').removeAttr('disabled');
+          $('#formKonfirNormalisasiJudul').html('Pembuatan Model Antibullying');
+          $('#formModel .modal-dialog .modal-content .modal-footer .proses').html('Proses');
+          $('#formModel .modal-dialog .modal-content .modal-body form p').html('Proses pembuatan model antibullying memerlukan waktu hingga beberapa lama, Anda yakin mau lanjut?'); 
+          $('#formModel .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $('#btn-proses-normalisasi').on('click', function(){
+            $('#btn-proses-normalisasi').attr('disabled','disabled');
+            $('#formModel .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/get_antibullying_model',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formModel .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-normalisasi').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-hapus-model-antibullying').on('click', function(){
+          $('#btn-proses-normalisasi2').removeAttr('disabled');
+          $('#formKonfirNormalisasiJudul2').html('Hapus Model Antibullying');
+          $('#formModel2 .modal-dialog .modal-content .modal-footer .proses').html('Hapus');
+          $('#formModel2 .modal-dialog .modal-content .modal-body form p').html('Proses ini akan membuat seluruh data model antibullying terhapus sepenuhnya, Anda yakin mau lanjut?'); 
+          $('#formModel2 .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $('#btn-proses-normalisasi2').on('click', function(){
+            $('#btn-proses-normalisasi2').attr('disabled','disabled');
+            $('#formModel2 .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/get_hapus_antibullying_model',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formModel2 .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-normalisasi2').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-hapus-null').on('click', function(){
+          $('#btn-proses-normalisasi3').removeAttr('disabled');
+          $('#formKonfirNormalisasiJudul3').html('Hapus Dataset Null');
+          $('#formModel3 .modal-dialog .modal-content .modal-footer .proses').html('Hapus');
+          $('#formModel3 .modal-dialog .modal-content .modal-body form p').html('Proses ini akan menghapus dataset bernilai null, Anda yakin mau lanjut?'); 
+          $('#formModel3 .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $.ajax({
+            url: BASE_URL + 'Antibullying/get_info_datasetnull',
+            method: 'post',
+            dataType: 'json',
+            success: function(response){
+              $('#jmlnull').val(response.jmlnull);
+            },
+              error: function (xhr, ajaxOptions, thrownError) { 
+                alert(xhr.responseText) 
+              }          
+          });
+
+          $('#btn-proses-normalisasi3').on('click', function(){
+            $('#btn-proses-normalisasi3').attr('disabled','disabled');
+            $('#formModel3 .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/get_hapus_dataset_null',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formModel3 .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-normalisasi3').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-split-data').on('click', function(){
+          $('#pesan-error-tambah').hide();
+          $('#pesan-sukses-tambah').hide();
+          $('#btn-proses-normalisasi4').removeAttr('disabled');
+          $('#formKonfirNormalisasiJudul4').html('Split Dataset Testing');
+          $('#formModel4 .modal-dialog .modal-content .modal-footer .proses').html('Split');
+          $('#formModel4 .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $.ajax({
+            url: BASE_URL + 'Antibullying/get_info_datasetkomentar',
+            method: 'post',
+            dataType: 'json',
+            success: function(response){
+              $('#totalcyberbullying').val(response.cyberbullying);
+              $('#totalnoncyberbullying').val(response.noncyberbullying);
+              $('#totaldataset').val(response.totaldata);
+            },
+              error: function (xhr, ajaxOptions, thrownError) { 
+                alert(xhr.responseText) 
+              }          
+          });
+
+          $('#btn-proses-normalisasi4').on('click', function(){
+            $('#btn-proses-normalisasi4').attr('disabled','disabled');
+            $('#formModel4 .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/get_split_dataset',
+                  method: 'post',
+                  data: $("#formsplit").serialize(),
+                  dataType: 'json',
+                  success: function(response){  
+                    if(response.status=="sukses"){
+                      $('#formModel4 .modal-dialog .modal-content .modal-body form .progress').hide();
+                      $('#btn-proses-normalisasi4').removeAttr('disabled');
+                      $('#pesan-sukses-tambah').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                    }else{
+                      $('#formModel4 .modal-dialog .modal-content .modal-body form .progress').hide();
+                      $('#btn-proses-normalisasi4').removeAttr('disabled');
+                      $('#pesan-error-tambah').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+      })
+    </script>

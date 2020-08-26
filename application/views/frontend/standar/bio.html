@@ -1,0 +1,175 @@
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row mt-5 mb-5">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb bg-dark mt-4">
+            <li class="breadcrumb-item">
+              <a class="text-light" href="<?php echo base_url('');?>">Beranda </a>
+            </li>
+            <li class="breadcrumb-item active">
+              <a class="text-light" href="<?php echo base_url('Bio/penulis/') . $pengguna->FIRST_NAME . '-' . $pengguna->LAST_NAME .'-'. $pengguna->ID;?>">Penulis</a>
+            </li>
+          </ol>
+
+        <!-- Title -->
+        <h1 class="mt-4"><center>Biografi Penulis</center></h1>
+
+        <!-- Author -->
+        <p class="lead">
+          <div class="bio-pic rounded-circle mr-3">
+            <center>
+              <?php
+                $url_profil = base_url('asset/logo/user.png');
+                if(!empty($pengguna->PHOTO_PROFIL)){
+                    $url_profil = base_url($pengguna->PHOTO_PROFIL);
+              ?>
+              <img src="<?php echo base_url();?><?php echo $pengguna->PHOTO_PROFIL;?>" alt="Image" class="img-fluidid rounded-circle mt-4" width="15%" height="15%">
+              <?php
+                  }else{
+              ?>
+              <img src="<?php echo $url_profil;?>" alt="Image" class="img-fluidid rounded-circle mt-4" width="15%" height="15%">
+              <?php } ?>
+
+              <p class="mt-4">
+                <b><?php echo $pengguna->FIRST_NAME . ' ' . $pengguna->LAST_NAME;?></b>
+                <a href="#" role="button" data-idx="<?php echo $pengguna->ID;?>" data-idy="
+                  <?php
+                    $id = 0;
+                    if(empty($_SESSION['user_id'])){
+                        $id = 0;
+                    }else{
+                        $id = $_SESSION['user_id'];
+                    }
+                    echo $id;
+  
+                  ?>" class="btn btn-outline-primary btn-sm" id="mengikuti">Ikuti</a>
+              </p>
+              <p class="mt-4">
+                  <span class="mx-1">&bullet;</span>
+                  <b>Total Artikel: <?php echo $total_artikel;?></b>
+                  <span class="mx-1">&bullet;</span>
+                  <b>Total Pengikut: <?php echo $total_pengikut;?></b>
+                  <span class="mx-1">&bullet;</span>
+                  <b>Total Mengikuti: <?php echo $total_mengikuti;?></b>
+              </p>
+              <p><?php echo $pengguna->ABOUT_ME;?></p>
+            </center>
+          </div>
+        </p>
+
+        <!-- Post Content -->
+        <p class="lead mt-4"></p>
+        <hr>
+
+        <!-- DataTables Tabel Kategori -->
+        <div class="card mb-12">
+            <div class="card-header">
+              <center><b>Kontribusi Karya</b></center>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th><center>No</center></th>
+                        <th><center>Tanggal</center></th>
+                        <th><center>Topik</center></th>
+                        <th><center>Judul</center></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php $n=1;
+                        foreach($artikel->result_array() as $posting){
+                      ?>
+                      <tr>
+                        <td><?php echo $n;?></td>
+                        <td><?php echo $posting['TANGGAL'];?></td>
+                        <td><?php echo $posting['NAMA_KATEGORI'];?></td>
+                        <td><a href="<?php echo base_url('artikel/detail') . '/' . $posting['JUDUL_URL'];?>"><?php echo $posting['JUDUL'];?></a></td>
+                      </tr>
+                      <?php $n=$n+1;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+          </div>
+      </div>
+
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+<script type="text/javascript">
+  $(document).ready(function(){
+    var BASE_URL = "<?php echo base_url();?>";
+    $('#myTable').DataTable();
+
+    $('#mengikuti').on('click', function(){
+      var idx = $(this).data('idx');
+      var id_mengikutix = 0;
+      id_mengikutix = $(this).data('idy');
+      if(id_mengikutix==0 || id_mengikutix==null){
+        id_mengikutix = 0;
+      }
+      $.ajax({
+        url: BASE_URL + 'Bio/aksi',
+        data: {id_bio: idx, id_user_mengikuti : id_mengikutix},
+        method: 'post',
+        dataType: 'json',
+        success: function(response){
+          if(response.status=='sukses'){
+            if(response.pesan=='Berhasil mengikuti!'){
+              alert(response.pesan);
+              $('#mengikuti').html('Telah Diikuti');
+            }else if(response.pesan=='Batal mengikuti!'){
+              alert(response.pesan);
+              $('#mengikuti').html('Ikuti');
+            }else if(response.pesan=='Mengikuti kembali!'){
+              alert(response.pesan);
+              $('#mengikuti').html('Telah Diikuti');
+            }else if(response.pesan=='Berhasil mengikutinya!'){
+              alert(response.pesan);
+              $('#mengikuti').html('Telah Diikuti');
+            }else{
+              alert(response.pesan);
+              $('#mengikuti').html('Ikuti');
+            }
+          }else{
+            alert(response.pesan);
+          }
+        },
+          error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+            alert(xhr.responseText) 
+        }
+      });
+    });
+
+    $('#mengikuti').ready(function(){
+      var idx = "<?php echo $pengguna->ID;?>";
+      var id_mengikutix = "<?php if(empty($_SESSION['user_id'])){ echo 0;}else{ echo $_SESSION['user_id'];}?>";
+      $.ajax({
+        url: BASE_URL + 'Bio/cek_mengikuti',
+        data: {id_bio: idx, id_user_mengikuti : id_mengikutix},
+        method: 'post',
+        dataType: 'json',
+        success: function(response){
+          //alert(response.pesan);
+          if(response.status=='sukses'){
+            if(response.pesan=='Y'){
+              $('#mengikuti').html('Telah Diikuti');
+            }else if(response.pesan=='N'){
+              $('#mengikuti').html('Ikuti');
+            }
+          }else{
+            $('#mengikuti').html('Ikuti');
+          }
+        },
+          error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+            alert(xhr.responseText) 
+        }
+      });
+    });
+
+  })
+</script>

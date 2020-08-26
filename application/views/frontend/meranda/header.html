@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="<?php echo $identitas['author'];?>">
+    <meta name="title" content="<?php echo $identitas['judul'];?>" />
+    <meta name="description" content="<?php echo $identitas['meta_deskripsi']; ?>" />
+    <meta name="keywords" content="<?php echo $identitas['keywords']; ?>" />
+    <link href="<?php echo base_url('asset/logo/logo.png');?>" rel="shortcut icon">
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="id" />
+    <meta name="language" content="id" />
+    <meta name="geo.country" content="id" />
+    <meta http-equiv="content-language" content="In-Id" />
+    <meta name="geo.placename" content="Indonesia" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+   
+  <title><?php echo $identitas['judul'];?></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Custom fonts for this template-->
+  <link href="<?php echo base_url('asset/admin/vendor/fontawesome-free/css/all.min.css');?>" rel="stylesheet" type="text/css">
+
+  <link href="https://fonts.googleapis.com/css?family=B612+Mono|Cabin:400,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/fonts/icomoon/style.css');?>">
+
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/bootstrap.min.css');?>">
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/jquery-ui.css');?>">
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/owl.carousel.min.css');?>">
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/owl.theme.default.min.css');?>">
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/owl.theme.default.min.css');?>">
+
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/jquery.fancybox.min.css');?>">
+
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/bootstrap-datepicker.css');?>">
+
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/fonts/flaticon/font/flaticon.css');?>">
+
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/aos.css');?>">
+  <link href="<?php echo base_url('asset/frontend/meranda/css/jquery.mb.YTPlayer.min.css');?>" media="all" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="<?php echo base_url('asset/frontend/meranda/css/style.css');?>">
+
+  <link href="<?php echo base_url('asset/admin/vendor/datatables/dataTables.bootstrap4.css');?>" rel="stylesheet">
+
+  
+</head>
+
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+    <div class="site-wrap">
+  
+      <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+          <div class="site-mobile-menu-close mt-3">
+            <span class="icon-close2 js-menu-toggle"></span>
+          </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+      </div>
+  
+  
+      
+      <div class="header-top">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-7 d-flex">
+              <a href="<?php echo base_url();?>" class="site-logo">
+                <img src="<?php echo base_url('asset/logo/logo.png')?>" width="40" height="40">
+                KebaikanKita.com
+              </a>
+            </div>
+            <div class="col-lg-4 ml-auto d-flex">
+              <form action="<?php echo base_url('artikel/cari');?>" method="POST" class="search-form d-inline-block">
+                <div class="d-flex">
+                  <input name="cari" type="text" class="form-control" placeholder="Cari...">
+                  <button type="submit" class="btn btn-secondary" ><span class="icon-search"></span></button>
+                </div>
+              </form>
+            </div>
+            <div class="col-lg-1">
+                <div class="dropdown">
+                    <?php 
+                      $this->load->library('ion_auth');
+                      if(!$this->ion_auth->logged_in()){
+                    ?>
+                      <a class="btn btn-outline-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Masuk
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="<?php echo base_url('auth/login');?>">Login</a>
+                      </div>
+                    <?php    
+                      }else{
+                    ?>
+                      <a class="btn btn-outline-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?php                   
+                          $user = $this->ion_auth->user()->row();
+                          echo $user->first_name;
+                        ?>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="<?php echo base_url('admin');?>">Admin &nbsp;<span class="badge badge-primary badge-pill"><?php if($notifikasi>0){echo $notifikasi;}?></span></a>
+                        <a class="dropdown-item" href="<?php echo base_url('Auth/Logout');?>">Logout</a>
+                      </div>
+                    <?php }?>
+                  </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="site-navbar py-2 js-sticky-header site-navbar-target d-none pl-0 d-lg-block" role="banner">
+  
+        <div class="container">
+            <div class="mr-auto d-flex align-items-center">
+                <nav class="site-navigation position-relative text-right" role="navigation">
+                  <ul class="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                    <li class="active">
+                      <a href="<?php echo base_url();?>" class="nav-link text-left">Beranda</a>
+                    </li>
+                    <li class="active">
+                      <a href="<?php echo base_url('Tentang_Kami');?>" class="nav-link text-left">Tentang Kami</a>
+                    </li>
+                    <li class="active">
+                      <a href="<?php echo base_url('kebijakan');?>" class="nav-link text-left">Kebijakan</a>
+                    </li>
+                    <li class="active">
+                      <a href="<?php echo base_url('FAQ');?>" class="nav-link text-left">FAQ</a>
+                    </li>
+                    <li class="active">
+                      <a href="<?php echo base_url('Kritik_Saran');?>" class="nav-link text-left">Masukan</a>
+                    </li>
+                  </ul>
+                </nav>
+            </div>
+
+          <div class="d-flex align-items-center">
+            
+                <div class="mr-auto">
+                  <nav class="site-navigation position-relative text-right" role="navigation">
+                    <ul class="site-menu main-menu js-clone-nav mr-auto d-none pl-0 d-lg-block">
+                      <?php
+                        foreach($kategori_pilihan->result_array() as $kat){
+                      ?>
+                      <li class="active">
+                        <a href="<?php echo base_url('kategori/cari');?>/<?php echo $kat['NAMA_KATEGORI'];?>" class="nav-link text-left"><?php echo $kat['NAMA_KATEGORI']; ?></a>
+                      </li>
+                      <?php } ?>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Kategori
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <?php
+                            foreach($kategori->result_array() as $kat){
+                          ?>
+                          <a class="dropdown-item" href="<?php echo base_url('kategori/cari');?>/<?php echo $kat['NAMA_KATEGORI'];?>"><?php echo $kat['NAMA_KATEGORI']; ?></a>
+                          <?php } ?>
+                        </div>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+           
+          </div>
+        </div>
+  
+      </div>
+      
+      </div>

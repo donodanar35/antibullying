@@ -1,0 +1,105 @@
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="sidebar navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="<?php echo base_url('admin');?>">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Artikel</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="<?php echo base_url('admin/artikel_buat');?>">Buat Artikel</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/artikel_kelola');?>">Kelola Artikel</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="far fa-images"></i>
+          <span>Galeri</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="<?php echo base_url('admin/galeri');?>">Kelola Galeri</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/galeri_upload');?>">Upload Gambar</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('admin/profil');?>">
+            <i class="fas fa-user"></i>
+          <span>Profil</span></a>
+      </li>      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="far fa-grin-alt"></i>
+          <span>Follow</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="<?php echo base_url('admin/follower');?>">Pengikut</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/following');?>">Mengikuti</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('admin/identitas');?>">
+            <i class="fas fa-certificate"></i>
+          <span>Konfigurasi</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('admin/kontak');?>">
+          <i class="fas fa-globe"></i>
+          <span>Tentang</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('admin/kebijakan');?>">
+          <i class="fa fa-info-circle"></i>
+          <span>Kebijakan</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('admin/evaluasi');?>">
+          <i class="fa fa-check-circle"></i>
+          <span>Evaluasi</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('admin/faq');?>">
+          <i class="fa fa-question-circle"></i>
+          <span>FAQ</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('admin/tagar');?>">
+          <i class="fa fa-hashtag"></i>
+          <span>Tagar</span></a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('Auth');?>">
+            <i class="fa fa-id-card"></i>
+            <span>Manajemen User</span></a>
+        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="<?php echo base_url('admin/kategori');?>" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-list"></i>
+          <span>Kategori</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="<?php echo base_url('admin/kategori_buat');?>">Buat Kategori</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/kategori');?>">Kelola Kategori</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-comments"></i>
+          <span>Anti-Cyberbullying</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="<?php echo base_url('admin/antibullying');?>">Dataset Artikel</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/antibullying_komentar');?>">Dataset Komentar</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/antibullying_kamusgaul');?>">Kamus Kata Gaul</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/antibullying_stopwordlist');?>">Stopword List</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/antibullying_kelaskata');?>">Kelas Kata</a>
+          <a class="dropdown-item" href="<?php echo base_url('admin/antibullying_pengujian');?>">Pengujian</a>
+        </div>
+      </li>
+    </ul>

@@ -1,0 +1,194 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/galeri');?>">Galeri</a>
+      </li>
+      <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/galeri');?>">Detail Galeri</a></li>
+    </ol>  
+
+    <a href="<?php echo base_url('admin/galeri_upload');?>" class="btn btn-success tampilModalGambar mb-3">Upload Gambar</a>
+
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="far fa-images"></i>
+              <b>Galeri</b> 
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                      <?php 
+                        foreach($galeri->result_array() as $g){
+                        $n=0;
+                      ?>
+
+                        <div class="col-sm mb-4">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top gambar" src="<?php echo base_url();?><?php echo $g['PHOTO'];?>" width="100" height="200">
+                                <div class="card-body">
+                                  <center>
+                                      <h5 class="card-title"><?php echo $g['NAMA_GALLERY'];?></h5>
+                                  </center>
+                                  <p class="card-text"><?php echo $g['KETERANGAN'];?></p>
+                                  <center>
+                                    <a href="#" class="btn btn-primary tampilModalDetail" data-toggle="modal" data-target="#formDetail" data-id="<?= $g['ID_GALLERY'];?>">Detail</a>
+                                    <a href="#" class="btn btn-danger tampilModalHapus" data-toggle="modal" data-target="#formHapus" data-id="<?= $g['ID_GALLERY'];?>">Hapus</a>
+                                  </center>
+                                  <input type="hidden" value="<?php echo base_url() . $g['PHOTO'];?>" id="<?php echo $g['ID_GALLERY'];?>">
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php }?>
+                    </div>
+                    <br/>
+                    
+                  </div>
+            </div>                
+            <div class="card-footer small text-muted">
+              <?php 
+                echo $this->pagination->create_links();
+                echo '<br/>'; 
+              ?>
+            </div>
+          </div>
+        </ol>
+    </div>
+</div>
+
+
+
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="formHapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="formHapusJudul">Hapus Galeri</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="formHapusGaleri" action="<?php echo base_url('galeri/hapus');?>" method="post">
+                  <input type="text" type="hidden" id="idgaleri" name="idgaleri">
+                  <p></p>              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">Hapus</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>  
+    <!-- Akhir dari modal hapus-->
+
+<!-- Modal Detail -->
+<div class="modal fade" id="formDetail" tabindex="-1" role="dialog" aria-labelledby="judulModalEdit" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formModalEditLabel"><strong>Detail Galeri</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img class="card-img-top gambar" id="foto_galeri" src="<?php echo base_url();?>">
+            <div class="card-body">
+                <center>
+                    <h5 class="card-title" id="judul_galeri"></h5>
+                </center>
+                <p class="card-text" id="keterangan_galeri"></p>
+            </div>
+            <div class="form-group">
+                <label for="namakategori"><strong> Sumber: </strong></label>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label></label>
+                        <input type="text" class="form-control" id="fotoku" placeholder="Masukan teks..." name="fotoku">
+                    </div>
+                    <button type="button" class="btn btn-md btn-primary ml-3" onclick="copySumber()">Salin</button>
+                </form>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal detail-->
+
+</div>
+<!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+        <!-- Custom js for this page-->
+      
+        <script type="text/javascript">
+          function copySumber(){
+              var valueText = $("#fotoku").select().val();
+              document.execCommand("copy");
+              Alert("Data '" + valueText + "' berhasil disalin!" );
+          }
+      </script>    
+
+      <script type="text/javascript">
+        //galeri
+        $(document).ready(function(){
+          
+          var BASE_URL = "<?php echo base_url();?>"; 
+          $('#pesan-error').hide();
+          $('#pesan-sukses').hide();          
+                    
+          $('.tampilModalDetail').on('click', function(){
+            const idx = $(this).data('id');
+            $.ajax({
+                url: BASE_URL + 'Galeri/detail',
+                data: {id : idx},
+                method: 'post',
+                dataType: 'json',
+                success: function(data){
+                    var path_foto = BASE_URL + data.PHOTO;
+                    $('#judul_galeri').html('<strong>' + data.NAMA_GALLERY + '</strong>');
+                    $('#keterangan_galeri').html(data.KETERANGAN);
+                    $('#foto_galeri').attr('src',path_foto);
+                    $('#fotoku').val(path_foto);
+                },
+                  error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                    alert(xhr.responseText) 
+                }
+            });
+          });
+
+          $('.tampilModalHapus').on('click', function(){
+              $('#formHapusJudul').html('<strong>Hapus Galeri</strong>');
+              $('#formHapus .modal-dialog .modal-content .modal-footer button[type=submit]').html('Hapus Data');             
+              const idx = $(this).data('id');
+              $.ajax({
+                  url: BASE_URL + 'Galeri/detail',
+                  data: {id : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(data){
+                    //alert(data.ID_GALLERY);
+                    $('#idgaleri').val(data.ID_GALLERY);
+                    $('#idgaleri').attr('type','hidden'); 
+                    $('#formHapus .modal-dialog .modal-content .modal-body form p').html('Anda yakin mau menghapus galeri '+ data.NAMA_GALLERY + '?');
+                    $('#formHapusGaleri').attr('action','<?php echo base_url('galeri/hapus');?>');  
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                      alert(xhr.responseText) 
+                    }          
+              });
+            });
+
+        })
+</script>

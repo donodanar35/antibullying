@@ -1,0 +1,145 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('admin/artikel_kelola');?>">Artikel</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/artikel_buat');?>">Pembuatan Artikel</a></li>
+      </ol>  
+      
+      <!-- Beri id "pesan-error" untuk menampung pesan error -->
+      <div id="pesan"></div>
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-table"></i>
+                <b>Buat Artikel</b>
+              </div>
+              <div class="card-body">
+                  <form id="formBuat" method="POST">
+                      <div class="form-group">
+                        <label for="kategori"><b>Headline</b></label>
+                        <div class="form-label-group">
+                            <center>
+                              <img id="gambar" src="<?php echo base_url('images/standar.jpg');?>" width="100%" height="100%">
+                            </center>
+                            <input type="file" id="fileku" name="file" size="33" />
+                            <small id="judulHelp" class="form-text text-muted">Upload gambar yang akan menjadi headline artikel.</small>
+                        </div>
+                      </div>
+                      
+                      <input type="hidden" value="" name="pathfoto" id="pathfoto" class="form-control">
+                      <input name="iduser" type="hidden" class="form-control" id="iduser" value="<?php echo $pengguna;?>">
+                      <div class="form-group">
+                        <label for="judul"><b>Judul</b></label>
+                        <input name="judul" type="text" class="form-control tinymce" id="judul" aria-describedby="Judul" placeholder="Masukkan judul...">
+                        <small id="judulHelp" class="form-text text-muted">Tulis judul artikel! Usahakan judul tidak lebih dari 160 karakter.</small>
+                      </div>
+                      <div class="form-group">
+                          <label for="kategori"><b>Kategori</b></label>
+                          <select class="form-control" id="kategori" name="kategori">
+                            <?php
+                              foreach($kategori->result_array() as $daftarkategori){
+                            ?>
+                              <option value="<?php echo $daftarkategori['ID_KATEGORI']; ?>">
+                                <?php echo $daftarkategori['NAMA_KATEGORI']; ?>
+                              </option>
+                            <?php }?>
+                          </select>
+                          <small id="kategoriHelp" class="form-text text-muted">Pilih kategori artikel!</small>
+                      </div>
+                      <div class="form-group">
+                        <label for="isiartikel"><b>Deskripsi Artikel</b></label>
+                        <textarea id="deskripsi_artikel" form="formBuat" rows="5" name="deskripsiartikel" class="form-control tinymce" required placeholder="Tulis deskripsi/ ringkasan/ abstraksi/ sinopsis artikel..."></textarea>
+                        <small id="deksirpsiartikelHelp" class="form-text text-muted">Tulis deskripsi/ ringkasan/ abstraksi/ sinopsis artikel! Usahakan deskripsi artikel tidak lebih dari 160 karakter.</small>
+                      </div>
+                      <div class="form-group">
+                          <label for="isiartikel"><b>Isi Artikel</b></label>
+                          <textarea id="mytextarea" form="formBuat" rows="20" name="isiartikel" class="form-control tinymce" required placeholder="Tulis isi artikel..."></textarea>
+                          <small id="isiartikelHelp" class="form-text text-muted">Tulis isi lengkap artikel!</small>
+                      </div>
+                      <div class="form-group">
+                        <label for="judul"><b>Kata Kunci</b></label>
+                        <input name="katakunci" type="text" class="form-control tinymce" id="katakunci" aria-describedby="Judul" placeholder="Masukkan kata kunci...">
+                        <small id="katakunciHelp" class="form-text text-muted">Tulislah kata kunci artikel! Usahakan kata kunci tidak lebih 7 kata. Pisahkan setiap kata kunci dengan tanda koma (,)</small>
+                      </div>
+                      <button id="btn-simpan-artikel" type="button" class="btn btn-primary">Simpan</button>
+                  </form>
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+
+    <script type="text/javascript">
+      
+      
+      //buat artikel
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('#btn-simpan-artikel').on('click', function(){
+          $.ajax({
+                  url: BASE_URL + 'Artikel/artikel_buat',
+                  data: $("#formBuat").serialize(),
+                  method: 'POST',
+                  dataType: 'json',
+                  success: function(response){
+                    //alert(response.pesan + response.status);
+                    if(response.status == 'sukses'){
+                      $('#pesan').html('<div class="alert alert-success">' + response.pesan +'</div>').fadeIn().delay(10000).fadeOut();
+                      alert('Artikel berhasil disimpan!');
+                      $('#btn-simpan-artikel').attr('disabled','true');
+                      var url = BASE_URL + "Artikel/detail/" + response.judul_url;
+                      window.setTimeout(function(){ window.location = url; },1000); 
+                    }else{
+                      $('#pesan').html('<div class="alert alert-danger">' + response.pesan + '</div>').fadeIn().delay(10000).fadeOut();
+                      alert('Terjadi kesalahan!');
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                      alert(xhr.responseText) 
+                    }
+                });
+        });
+
+                $('#fileku').on('change', function () {
+                    var BASE_URL = "<?php echo base_url();?>";
+                    var file_data = $('#fileku').prop('files')[0];
+                    var form_data = new FormData();
+                    form_data.append('file', file_data);
+                    $.ajax({
+                        url: BASE_URL + 'Artikel/upload_file', 
+                        dataType: 'json', 
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                          if(response.status == 'sukses'){
+                            $('#pathfoto').val(response.pesan); 
+                            var path_foto = BASE_URL + response.pesan;
+                            $('#gambar').attr('src',path_foto);
+                          }else{
+                            alert(response.pesan);
+                          }
+                            
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                          alert(xhr.responseText); 
+                        }
+                    });
+                });
+
+    })
+  </script>

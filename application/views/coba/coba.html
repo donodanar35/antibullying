@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+      
+        <title>SB Admin - Dashboard</title>
+      
+        <script src="<?php echo base_url('asset/tinymce/js/tinymce/tinymce.min.js');?>"></script>
+        <script>tinymce.init({selector:‘textarea’, menubar:'', theme: ‘modern’}});</script>
+      
+        <!-- Custom fonts for this template-->
+        <link href="<?php echo base_url('asset/admin/vendor/fontawesome-free/css/all.min.css');?>" rel="stylesheet" type="text/css">
+      
+        <!-- Page level plugin CSS-->
+        <link href="<?php echo base_url('asset/admin/vendor/datatables/dataTables.bootstrap4.css');?>" rel="stylesheet">
+      
+        <!-- Custom styles for this template-->
+        <link href="<?php echo base_url('asset/admin/css/sb-admin.css');?>" rel="stylesheet">
+    </head>
+    <body>
+        <form action="<?php echo base_url('coba/pos');?>" method="POST">
+            <div class="form-group">
+                <label for="exampleInputEmail1"><b>Nama Website</b></label>
+                <input name="namawebsite" type="text" placeholder="Masukkan nama website...">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1"><b>Alamat Website</b></label>
+                <input name="alamatwebsite" type="text" placeholder="Masukkan alamat website...">
+              </div>
+              <div class="form-group">
+                  <label for="metaDeskripsi"><b>Meta Deskripsi</b></label>
+                  <textarea name="metadeskripsi"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="metaKeyword"><b>Meta Keyword</b></label>
+                <textarea name="metakeyword" id="metaKeyword" class="form-control tinymce"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1"><b>Favicon</b></label>
+                <input name="favicon" type="text" id="favicon" class="form-control tinymce" aria-describedby="favicon" placeholder="Masukkan favicon...">
+              </div>
+                <script>tinymce.init({ mode : "textareas"});</script>
+              <button type="submit">Simpan</button>
+        </form>
+
+        <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>
+        <!-- Bootstrap core JavaScript-->
+  <script src="<?php echo base_url('asset/admin/vendor/jquery/jquery.min.js');?>"></script>
+  <script src="<?php echo base_url('asset/admin/vendor/bootstrap/js/bootstrap.bundle.min.js');?>"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="<?php echo base_url('asset/admin/vendor/jquery-easing/jquery.easing.min.js');?>"></script>
+
+  <!-- Page level plugin JavaScript-->
+  <script src="<?php echo base_url('asset/admin/vendor/chart.js/Chart.min.js');?>"></script>
+  <script src="<?php echo base_url('asset/admin/vendor/datatables/jquery.dataTables.js');?>"></script>
+  <script src="<?php echo base_url('asset/admin/vendor/datatables/dataTables.bootstrap4.js');?>"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="<?php echo base_url('asset/admin/js/sb-admin.min.js');?>"></script>
+
+  
+
+  <!-- Demo scripts for this page-->
+  <script src="<?php echo base_url('asset/admin/js/demo/datatables-demo.js');?>"></script>
+  <script src="<?php echo base_url('asset/admin/js/demo/chart-area-demo.js');?>"></script>
+    </body>
+</html>

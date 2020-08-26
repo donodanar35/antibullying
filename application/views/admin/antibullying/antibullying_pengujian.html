@@ -1,0 +1,755 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('Admin/antibullying_pengujian');?>">Pengujian</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="#">Detail</a></li>
+      </ol> 
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-comments"></i>
+                <b>Analisis Cyberbullying</b>
+              </div>
+              <div class="card-body">
+                  <form id="formUji" method="POST">
+                    <div class="form-group">
+                      <label for="sumber"><b>Komentar</b></label>                      
+                      <textarea type="text" rows="2" class="form-control" id="komentar" name="komentar" placeholder="Komentar..."></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="sumber"><b>Hasil Analisis Sentimen</b></label>
+                      <div id="hasil-sentimen"><p></p></div>
+                    </div>
+                    <button id="btn-proses-antibullying" type="button" class="btn btn-primary">Proses</button>
+                  </form>
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+
+          <a id="btn-model" href="#" class="btn btn-success mb-3 pull-right tambah-pengujian" data-toggle="modal" data-target="#formTambah">
+            <span class="glyphicon glyphicon-plus"></span> &nbsp;Buat Pengujian
+          </a>
+
+          <a id="btn-model" href="#" class="btn btn-danger mb-3 pull-right hapus-pengujian" data-toggle="modal" data-target="#formModel2">
+            <span class="glyphicon glyphicon-plus"></span> &nbsp;Hapus Pengujian
+          </a>
+          
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-comments"></i>
+                <b>Daftar Pengujian Antibullying Model</b>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th><center>ID</center></th>
+                          <th><center>Tgl Uji</center></th>
+                          <th><center>Mode</center></th>
+                          <th><center>Segmen Awal</center></th>
+                          <th><center>Segmen Akhir</center></th>
+                          <th><center>ΣBully</center></th>
+                          <th><center>ΣNon</center></th>
+                          <th><center>ΣDataset</center></th>
+                          <th><center>ΣTes</center></th>
+                          <th><center>TP</center></th>
+                          <th><center>FP</center></th>
+                          <th><center>FN</center></th>
+                          <th><center>TN</center></th>
+                          <th><center>Acc%</center></th>
+                          <th><center>Error%</center></th>
+                          <th><center>Precision%</center></th>
+                          <th><center>Recall%</center></th>
+                          <th><center>Specificity%</center></th>
+                          <th><center>F_Score%</center></th>
+                          <th><center>Action</center></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php 
+                          $total_datates = 0;
+                          $total_tp = 0;
+                          $total_fp = 0;
+                          $total_fn = 0;
+                          $total_tn = 0;
+                          $total_akurasi = 0;
+                          $total_error = 0;
+                          $total_precisi = 0;
+                          $total_recall = 0;
+                          $total_specificity = 0;
+                          $total_fscore = 0;
+                          $n_akurasi = 0;
+                          $n_error = 0;
+                          $n_precisi = 0;
+                          $n_recall = 0;
+                          $n_specificity = 0;
+                          $n_fscore = 0;
+                          $persen_akurasi = 0;
+                          $persen_error = 0;
+                          $persen_precisi = 0;
+                          $persen_recall = 0;
+                          $persen_specificity = 0;
+                          $persen_fscore = 0;
+                          $is_ringkas = 0;
+                          foreach($pengujian->result_array() as $uji){
+                            if(isset($uji['ID_UJI'])){
+                              $is_ringkas = 1;
+                        ?>
+                          <tr>
+                              <td>
+                                <a href="<?php echo site_url();?>Admin/antibullying_detail_pengujian/<?php echo $uji['ID_UJI']?>" data-idy="#">
+                                  <?php echo $uji['ID_UJI'];?>
+                                </a>
+                              </td>
+                              <td><?php echo $uji['TGL_UJI'];?></td>
+                              <td><?php echo $uji['MODE'];?></td>
+                              <td><?php echo $uji['SEGMEN_AWAL'];?></td>
+                              <td><?php echo $uji['SEGMEN_AKHIR'];?></td>
+                              <td><?php echo $uji['JML_CYBERBULLYING'];?></td>
+                              <td><?php echo $uji['JML_NONCYBERBULLYING'];?></td>
+                              <td><?php echo $uji['DATA_TES'];?></td>
+                              <td>
+                                <?php
+                                  echo $uji['DATA_TES'];
+                                  $total_datates = $total_datates + $uji['DATA_TES'];
+                                ?>
+                              </td>
+                              <td>
+                                <?php 
+                                  echo $uji['TP'];
+                                  $total_tp = $total_tp + $uji['TP'];
+                                ?>
+                              </td>
+                              <td>
+                                <?php 
+                                  echo $uji['FP'];
+                                  $total_fp = $total_fp + $uji['FP'];
+                                ?>
+                              </td>
+                              <td>
+                                <?php 
+                                  echo $uji['FN'];
+                                  $total_fn = $total_fn + $uji['FN'];
+                                ?>
+                              </td>
+                              <td>
+                                <?php 
+                                  echo $uji['TN'];
+                                  $total_tn = $total_tn + $uji['TN'];
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                  $persen_akurasi = $persen_akurasi + ($uji['AKURASI']*100);
+                                  $temp = $uji['AKURASI'] * 100; 
+                                  echo round($temp,2);
+                                  $n_akurasi =$n_akurasi + 1;
+                                  $total_akurasi = $total_akurasi + $persen_akurasi;
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                  $persen_error = $persen_error + ($uji['ERROR_RATE']*100);
+                                  $temp = $uji['ERROR_RATE'] *100;  
+                                  echo round($temp,2);
+                                  $n_error = $n_error + 1;
+                                  $total_error = $total_error + $persen_error;
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                  $persen_precisi = $persen_precisi + ($uji['PRECISI']*100);
+                                  $temp = $uji['PRECISI'] * 100;  
+                                  echo round($temp,2);
+                                  $n_precisi = $n_precisi + 1;
+                                  $total_precisi = $total_precisi + $total_precisi; 
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                  $persen_recall = $persen_recall +($uji['RECALL']*100);
+                                  $temp = $uji['RECALL'] * 100;
+                                  echo round($temp,2);
+                                  $n_recall = $n_recall + 1;
+                                  $total_recall = $total_recall + $total_recall;
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                  $persen_specificity = $persen_specificity + ($uji['SPECIFICITY']*100);
+                                  $temp = $uji['SPECIFICITY'] * 100;  
+                                  echo round($temp,2);
+                                  $n_specificity = $n_specificity + 1;
+                                  $total_specificity = $total_specificity + $total_specificity;
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                  $persen_fscore = $persen_fscore + ($uji['F_SCORE']*100);
+                                  $temp = $uji['F_SCORE'] * 100;
+                                  echo round($temp,2);
+                                  $n_fscore = $n_fscore + 1;
+                                  $total_fscore = $total_fscore + $total_fscore;
+                                ?>
+                              </td>
+                              <td>
+                                <?php if($uji['AKURASI'] == 0){ ?>
+                                  <center>
+                                    <a href="#" class="btn btn-primary konfir-pengujian" data-toggle="modal" data-target="#formEdit" data-idx="<?php echo $uji['ID_UJI']; ?>">Uji</a>  
+                                    <a href="#" class="btn btn-danger konfir-hapus" data-toggle="modal" data-target="#formHapus" data-idy="<?php echo $uji['ID_UJI']; ?>">Hapus</a>
+                                  </center>
+                                <?php }else{ ?>
+                                  <center>  
+                                    <a href="#" class="btn btn-danger konfir-hapus" data-toggle="modal" data-target="#formHapus" data-idy="<?php echo $uji['ID_UJI']; ?>">Hapus</a>
+                                  </center>
+                                <?php }?>
+                              </td>
+                            </tr>
+                        <?php }}?>
+                        <?php if($is_ringkas==1){?>
+                        <tr>
+                          <td><b>#</b></td>
+                          <td><b>Ringkasan:</b></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td><?php echo '<b>' . $uji['JML_CYBERBULLYING'] .'</b>';?></td>
+                          <td><?php echo '<b>' . $uji['JML_NONCYBERBULLYING'] .'</b>';?></td>
+                          <td><?php echo '<b>' . $uji['TOTAL_DATA'] .'</b>';?></td>
+                          <td><?php echo '<b>' . $total_datates .'</b>';?></td>
+                          <td><?php echo '<b>' . $total_tp .'</b>';?></td>
+                          <td><?php echo '<b>' . $total_fp .'</b>';?></td>
+                          <td><?php echo '<b>' . $total_fn .'</b>';?></td>
+                          <td><?php echo '<b>' . $total_tn .'</b>';?></td>
+                          <td>
+                            <?php 
+                              $rata2_akurasi = ($persen_akurasi)/$n_akurasi; 
+                              echo '<b>' . round($rata2_akurasi,2) .'</b>';
+                            ?>
+                          </td>
+                          <td>
+                            <?php
+                              $rata2_eror = ($persen_error)/$n_error;  
+                              echo '<b>' . round($rata2_eror,2) .'</b>';
+                            ?>
+                          </td>
+                          <td>
+                            <?php
+                              $rata2_precisi = $persen_precisi/$n_precisi; 
+                              echo '<b>' . round($rata2_precisi,2) .'</b>';
+                            ?>
+                          </td>
+                          <td>
+                            <?php
+                              $rata2_recall = $persen_recall/$n_recall; 
+                              echo '<b>' . round($rata2_recall,2) .'</b>';
+                            ?>
+                          </td>
+                          <td>
+                            <?php
+                              $rata2_specificity = $persen_specificity/$n_specificity;
+                              echo '<b>' . round($rata2_specificity,2) .'</b>';
+                            ?>
+                          </td>
+                          <td>
+                            <?php
+                              $rata2_fscore = $persen_fscore/$n_fscore; 
+                              echo '<b>' . round($rata2_fscore,2) .'</b>';
+                            ?>
+                          </td>
+                          <td></td>
+                        </tr>
+                        <?php }?>
+                      </tbody>  
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+
+            <!-- Area Chart tayangan-->
+            <br/>
+            <div class="card mb-3">
+              <div class="card-header">
+                <i class="fas fa-chart-area"></i>
+                <b>Grafik Pengujian</b>
+              </div>
+              <div class="card-body">
+                  <div class="form-group">
+                      <select multiple class="form-control" id="exampleFormControlSelect2">
+                        <option data-idx="AKURASI" class="report-post">
+                          Akurasi
+                        </option>
+                        <option data-idx="ERROR_RATE" class="report-post">
+                          Error_rate
+                        </option>
+                        <option data-idx="SPECIFICITY" class="report-post">
+                          Specificity
+                        </option>
+                        <option data-idx="RECALL" class="report-post">
+                          Recall
+                        </option>
+                        <option data-idx="PRECISION" class="report-post">
+                          Precision
+                        </option>
+                        <option data-idx="F_SCORE" class="report-post">
+                          F_score
+                        </option>
+                      </select>
+                  </div>
+                <canvas id="statistik-pengujian" width="100%" height="30"></canvas>
+              </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+<!-- Modal Hapus -->
+<div class="modal fade" id="formHapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formHapusJudul">Konfirmasi Hapus Pengujian</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Beri "pesan" untuk menampung pesan error -->
+        <div id="pesan-error-hapus" class="alert alert-danger"></div>
+        <div id="pesan-sukses-hapus" class="alert alert-success"></div>
+        <p>Anda yakin mau menghapus data pengujian <span id="iddatahapus"></span>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+        <button type="submit" class="btn btn-primary" id="btn-hapus">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal hapus-->
+
+<!-- Modal Tambah -->
+<div class="modal fade" id="formTambah" tabindex="-1" role="dialog" aria-labelledby="judulModalTambah" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formModalTambahLabel">Tambah Pengujian Testing</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Beri id "pesan-error" untuk menampung pesan-->
+        <div id="pesan-error-tambah" class="alert alert-danger"></div>
+        <div id="pesan-sukses-tambah" class="alert alert-success"></div>
+
+        <form method="POST" id="formPengujian">
+          <div class="form-group">
+            <label for="mode"><b>Mode</b></label>
+            <select class="form-control" id="mode" name="mode">
+              <option value="mode">Pilih mode</option>
+              <option value="training">Training</option>
+              <option value="testing">Testing</option>
+            </select>
+            <small id="modeHelp" class="form-text text-muted">Pilih mode pengujian!</small>
+          </div>
+          <div class="form-group">
+            <label for="judulartikel">Segman Awal</label>
+            <div class="row">
+              <div class="col-md-6">
+                <input disabled type="text" class="form-control" id="segmenawal" name="segmenawal" placeholder="0">
+                <input type="hidden" class="form-control" id="segmenawalx" name="segmenawalx" placeholder="0">
+              </div>
+              <div class="col-md-6">
+                <input type="number" class="form-control" id="segmenawalparam" name="segmenawalparam" placeholder="Segmen awal data...">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="judulartikel">Segmen Akhir</label>
+            <div class="row">
+              <div class="col-md-6">
+                <input disabled type="text" class="form-control" id="segmenakhir" name="segmenakhir" placeholder="0">
+                <input type="hidden" class="form-control" id="segmenakhirx" name="segmenakhirx" placeholder="0">
+              </div>
+              <div class="col-md-6">
+                <input type="number" class="form-control" id="segmenakhirparam" name="segmenakhirparam" placeholder="Segmen akhir data...">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="judulartikel">Total Data</label>
+            <input disabled type="text" class="form-control" id="totaldata-tampil" name="totaldata" placeholder="Total data...">
+            <input type="hidden" class="form-control" id="totaldata" name="totaldata" placeholder="Total data...">
+          </div>
+          <div class="form-group">
+            <label for="isiartikel">Keterangan</label>
+            <textarea type="text" rows="1" class="form-control" id="keterangan" name="keterangan" placeholder="Isi keterangan pengujian..."></textarea>
+            <input type="hidden" class="form-control" id="cyberbullying" name="cyberbullying">
+            <input type="hidden" class="form-control" id="noncyberbullying" name="noncyberbullying">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+        <button type="button" id="btn-tambah-pengujian" class="btn btn-primary">Tambah Data</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal tambah-->
+
+<!-- Modal Hapus Pengujian -->
+<div class="modal fade" id="formModel2" tabindex="-1" role="dialog" aria-labelledby="formKonfirNormalisasi" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formKonfirNormalisasiJudul2">Hapus Kategori</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            <p></p>
+            <div class="progress">
+              <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+        <button disabled type="button" class="btn btn-danger proses" id="btn-proses-normalisasi2">Hapus</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Akhir dari modal hapus-->
+
+<!-- Modal Edit -->
+<div class="modal fade" id="formEdit" tabindex="-1" role="dialog" aria-labelledby="judulModalEdit" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="formModalEditLabel">Konfirmasi Pengujian</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- Beri "pesan" untuk menampung pesan error -->
+      <div id="pesan-error-edit" class="alert alert-danger"></div>
+      <div id="pesan-sukses-edit" class="alert alert-success"></div>
+
+      <form method="post">
+        <p>Pengujian model antibullying memerlukan waktu beberapa lama, Anda yakin mau lanjut?</p>
+        <div class="progress">
+          <div class="progres-konfir progress-bar <strong>progress-bar-animated</strong> progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Harap tunggu!</div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+      <button type="button" id="btn-pengujian" class="btn btn-primary">Pengujian</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>  
+<!-- Akhir dari modal edit-->
+    
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+    <script type="text/javascript">
+        
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('.btn-tutup').on('click', function(){
+          var url = "";
+          window.setTimeout(function(){ window.location = url; },1000);
+        });
+
+        $('#btn-proses-antibullying').on('click', function(){
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/kalkuasi_sentimen',
+                  method: 'post',
+                  dataType: 'json',
+                  data: $("#formUji").serialize(),
+                  success: function(response){
+                    if(response.status =='sukses'){
+                      alert('Hasil analisis sentimen: ' + response.pesan + ' | Bobot Cyberbullying: ' + response.bobot_cyberbullying + ' | Bobot Non-cyberbullying: ' + response.bobot_noncyberbullying);
+                      $('#komentar').val('');
+                      $('#hasil-sentimen p').html('<div class="table-responsive-xl"><table class="table table-hover"><tr><td><center><b>Aspek</b></center></td><td><center><b>Keterangan</b></center></td></tr><tr><td><b>Komentar</b> </td><td> ' + response.komentar +'</td></tr><tr><td><b>Hasil preprocessing</b></td><td> ' + response.preprocessing +'</td><tr><td><b>Bobot Cyberbullying</b></td><td> ' + response.bobot_cyberbullying + '</td></tr><tr><td><b>Bobot Non-cyberbullying</b></td><td> ' + response.bobot_noncyberbullying + '</td></tr></tr><tr><td><b>Hasil analisis sentimen</b></td><td><b> ' + response.pesan +'</b></td></tr></table></div>');
+                    }else{
+                      alert(response.pesan);
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+        });
+
+        $('.tambah-pengujian').on('click', function(){
+          $('#pesan-error-tambah').hide();
+          $('#pesan-sukses-tambah').hide();
+          $('#formModalTambahLabel').html('Tambah Pengujian Antibullying');
+          $('#formTambah .modal-dialog .modal-content .modal-footer .proses').html('Tambah');
+          $('#mode').on('change', function(){
+            let mode = $('#mode').val();
+            if(mode=='testing'){
+              $.ajax({
+                  url: BASE_URL + 'Antibullying/get_info_datasetkomentar_testing',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#segmenawal').val(response.segmenawal);
+                    $('#segmenakhir').val(response.segmenakhir);
+                    $('#segmenawalx').val(response.segmenawal);
+                    $('#segmenakhirx').val(response.segmenakhir);
+                    $('#totaldata-tampil').val(response.totaldata);
+                    $('#totaldata').val(response.totaldata);
+                    $('#cyberbullying').val(response.cyberbullying);
+                    $('#noncyberbullying').val(response.noncyberbullying);  
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                  }          
+              });
+            }else{
+              $.ajax({
+                  url: BASE_URL + 'Antibullying/get_info_datasetkomentar_training',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#segmenawal').val(response.segmenawal);
+                    $('#segmenakhir').val(response.segmenakhir);
+                    $('#segmenawalx').val(response.segmenawal);
+                    $('#segmenakhirx').val(response.segmenakhir);
+                    $('#totaldata-tampil').val(response.totaldata);
+                    $('#totaldata').val(response.totaldata);
+                    $('#cyberbullying').val(response.cyberbullying);
+                    $('#noncyberbullying').val(response.noncyberbullying);   
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                  }          
+              });
+            }
+          });
+        });
+          
+
+                      $('#btn-tambah-pengujian').on('click', function(){
+                      $.ajax({
+                        url: BASE_URL + 'Antibullying/tambah_pengujian',
+                        method: 'post',
+                        dataType: 'json',
+                        data: $("#formPengujian").serialize(),
+                        success: function(response){
+                          if(response.status=="sukses"){
+                            $('#btn-tambah-pengujian').attr('disabled','disabled');
+                            alert(response.pesan);
+                            $('#pesan-sukses-tambah').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                          }else{
+                            $('#pesan-error-tambah').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                            alert(response.pesan);
+                          }
+                        },
+                          error: function (xhr, ajaxOptions, thrownError) { 
+                            alert(xhr.responseText) 
+                          }          
+                      });
+                    });         
+
+        $('.konfir-pengujian').on('click', function(){
+          $('#formEdit .modal-dialog .modal-content .modal-body form .progress').hide();
+          $('#formEdit .modal-dialog .modal-content .modal-body form .progress').hide();
+          $('#pesan-error-edit').hide();
+          $('#pesan-sukses-edit').hide();
+          const idx = $(this).data('idx');
+          $('#btn-pengujian').on('click', function(){
+            $('#btn-pengujian').attr('disabled','disabled');
+            $('.btn-tutup').attr('disabled','disabled');
+            $('#formEdit .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/pengujian',
+                  method: 'post',
+                  data: {id : idx},
+                  dataType: 'json',
+                  success: function(response){
+                    if(response.status="sukses"){
+                      $('#formEdit .modal-dialog .modal-content .modal-body form .progress').hide();
+                      $('#btn-pengujian').removeAttr('disabled');
+                      $('.btn-tutup').removeAttr('disabled');
+                      alert(response.pesan);
+                      $('#pesan-sukses-edit').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                    }else{
+                      $('#formEdit .modal-dialog .modal-content .modal-body form .progress').hide();
+                      $('#btn-pengujian').removeAttr('disabled');
+                      $('.btn-tutup').removeAttr('disabled');
+                      alert(response.pesan);
+                      $('#pesan-error-edit').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.konfir-hapus').on('click', function(){
+          $('#pesan-error-hapus').hide();
+          $('#pesan-sukses-hapus').hide();
+          const idy = $(this).data('idy');
+          $('#iddatahapus').html(idy);
+          $('#btn-hapus').on('click', function(){
+            $('#btn-hapus').attr('disabled','disabled');
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/hapus_pengujian',
+                  method: 'post',
+                  data: {id : idy},
+                  dataType: 'json',
+                  success: function(response){
+                    if(response.status="sukses"){
+                      $('#btn-hapus').removeAttr('disabled');
+                      alert(response.pesan);
+                      $('#pesan-sukses-hapus').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                    }else{
+                      $('#btn-hapus').removeAttr('disabled');
+                      alert(response.pesan);
+                      $('#pesan-error-hapus').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        $('.hapus-pengujian').on('click', function(){
+          $('#btn-proses-normalisasi2').removeAttr('disabled');
+          $('#formKonfirNormalisasiJudul2').html('Hapus Seluruh Data Pengujian');
+          $('#formModel2 .modal-dialog .modal-content .modal-footer .proses').html('Hapus');
+          $('#formModel2 .modal-dialog .modal-content .modal-body form p').html('Proses ini akan membuat seluruh data pengujian terhapus sepenuhnya, Anda yakin mau lanjut?'); 
+          $('#formModel2 .modal-dialog .modal-content .modal-body form .progress').hide();
+
+          $('#btn-proses-normalisasi2').on('click', function(){
+            $('#btn-proses-normalisasi2').attr('disabled','disabled');
+            $('#formModel2 .modal-dialog .modal-content .modal-body form .progress').show();
+            $.ajax({
+                  url: BASE_URL + 'Antibullying/get_hapus_seluruh_pengujian',
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(response){
+                    $('#formModel2 .modal-dialog .modal-content .modal-body form .progress').hide();
+                    $('#btn-proses-normalisasi2').removeAttr('disabled');
+                    alert(response.pesan);
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { 
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+        });
+
+        var jenis_laporan = "AKURASI";
+        $('.report-post').on('click', function(){
+          jenis_laporan = $(this).data('idx');
+          $.ajax({
+            url: BASE_URL + 'Antibullying/laporan_pengujian',
+            method: 'post',
+            dataType: 'json',
+            success: function(response){
+
+              if(jenis_laporan=="AKURASI"){
+                var $d = $('#statistik-pengujian');
+                var cty = $d.get(0).getContext('2d');
+                laporan_pengujian(cty, response.data_tes, response.akurasi, response.judul + " Akurasi");
+              }else if(jenis_laporan=="ERROR_RATE"){
+                var $d = $('#statistik-pengujian');
+                var cty = $d.get(0).getContext('2d');
+                laporan_pengujian(cty, response.data_tes, response.error_rate, response.judul + " Error Rate");
+              }else if(jenis_laporan=="RECALL"){
+                var $d = $('#statistik-pengujian');
+                var cty = $d.get(0).getContext('2d');
+                laporan_pengujian(cty, response.data_tes, response.recall, response.judul + " Recall");
+              }else if(jenis_laporan=="SPECIFICITY"){
+                var $d = $('#statistik-pengujian');
+                var cty = $d.get(0).getContext('2d');
+                laporan_pengujian(cty, response.data_tes, response.specificity, response.judul + " Specificity");
+              }else if(jenis_laporan=="PRECISION"){
+                var $d = $('#statistik-pengujian');
+                var cty = $d.get(0).getContext('2d');
+                laporan_pengujian(cty, response.data_tes, response.precisi, response.judul + " Precision");
+              }else if(jenis_laporan=="F_SCORE"){
+                var $d = $('#statistik-pengujian');
+                var cty = $d.get(0).getContext('2d');
+                laporan_pengujian(cty, response.data_tes, response.f_score, response.judul + " F_score");
+              }else{
+                var $d = $('#statistik-pengujian');
+                var cty = $d.get(0).getContext('2d');
+                laporan_pengujian(cty, response.data_tes, response.akurasi, response.judul + " Akurasi");
+              }
+            },
+            error: function (xhr, ajaxOptions, thrownError) { 
+              alert(xhr.responseText) 
+            }
+          });
+        });
+
+        function laporan_pengujian(cty, data_tes, hasil, judul){
+          var myChart2 = new Chart(cty, {
+              type: 'line',
+              data: {
+                  labels: data_tes,
+                  datasets: [{
+                      label: judul,
+                      data: hasil,
+                      backgroundColor: [
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)'
+                      ],
+                      borderColor: [
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)',
+                      'rgba(0, 0, 0, 0.1)' 
+                      ],
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero: true
+                          }
+                      }]
+                  }
+              }
+          });   
+        }
+
+    })
+  </script>

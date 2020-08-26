@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>AJAX File upload using Codeigniter, jQuery</title>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function (e) {
+                $('#fileku').on('change', function () {
+                    var BASE_URL = "<?php echo base_url();?>";
+                    var file_data = $('#fileku').prop('files')[0];
+                    var form_data = new FormData();
+                    form_data.append('file', file_data);
+                    $.ajax({
+                        url: BASE_URL + 'letupload/upload_file', // point to server-side controller method
+                        dataType: 'text', // what to expect back from the server
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                            //alert(response);
+                            $('#msg').html(response); // display success response from the server
+                            $('#gambar').attr('src',response);
+                        },
+                        error: function (response) {
+                            $('#msg').html(response); // display error response from the server
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <p id="msg"></p>
+        <img id="gambar" src="" width="100" height="100"><br/>
+        <input type="file" id="fileku" name="file" />
+        <button id="upload">Upload</button>
+    </body>
+</html>

@@ -1,0 +1,49 @@
+  <div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('Admin/notifikasi');?>">Notifikasi</a>
+      </li>
+    </ol>  
+
+    <a href="<?php echo base_url('Admin/notifikasi');?>" class="btn btn-trasparant mb-3 pull-right">
+      <span class="fa fa-eye">&nbsp;Tandai Notifikasi</span>
+    </a>
+
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-bell"></i>
+              <b>Notifikasi</b> 
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                      <ul class="list-group list-group-flush">
+                        <?php
+                          foreach($daftar_notifikasi->result() as $notif){
+                        ?>  
+                        <li class="list-group-item"><?php echo $notif->NOTIFIKASI; ?></li>
+                        <?php } ?>
+                      </ul>
+                    </div>
+                </div>
+            </div>                
+            <div class="card-footer small text-muted">
+              <?php echo $this->pagination->create_links();?> 
+            </div>
+          </div>
+        </ol>
+    </div>
+</div>
+  <!-- /.container-fluid -->
+ 
+  <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+  <script type="text/javascript">
+  $(document).ready(function(){
+    var BASE_URL = "<?php echo base_url();?>";
+  });
+  </script>

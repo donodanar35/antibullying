@@ -1,0 +1,70 @@
+    <div class="site-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- Breadcrumbs-->
+              <ol class="breadcrumb bg-transparent mb-5">
+                <ol class="breadcrumb bg-transparent">
+                <li class="breadcrumb-item">
+                  <a class="text-black" href="<?php echo base_url('');?>">Beranda </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <a class="text-black" href="<?php echo base_url('faq');?>">FAQ</a>
+                  </li>
+                </ol>
+              </ol>
+          <!-- Title -->
+          <h2 class="mt-4"><center>FAQ</center></h2>
+
+          <!-- Author -->
+          <hr>
+          <p class="lead">
+            <div class="bio-pic  mr-3">
+                <p class="mt-4">
+                  Berikut disajikan berbagai pertanyaan dan jawaban yang umumnya ditanyakan terkait platform KebaikanKita.com. Jika Anda ingin bertanya lebih lanjut, silahkan masuk pada tautan berikut <a href="https://kebaikankita.com/kritik_saran">ini</a>.
+                </p>
+            </div>
+          </p>
+
+          <!-- Post Content -->
+          <p class="lead mt-4">
+
+            <?php $n=1;
+              foreach($faq->result_array() as $f){
+            ?>
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne<?php echo $n;?>" aria-expanded="true" aria-controls="collapseOne">
+                        <?php echo $f['PERTANYAAN'];?>
+                      </button>
+                    </h2>
+                  </div>
+              
+                  <div id="collapseOne<?php echo $n;?>" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <?php echo $f['JAWABAN'];?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <?php $n++;}?>
+            <hr/>
+          </p>              
+          </div>
+          
+        </div>
+
+        
+      </div>
+    </div>
+
+      <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+      <script type="text/javascript">
+        $(document).ready(function(){
+          var BASE_URL = "<?php echo base_url();?>";
+          $('.collapse').collapse()
+      
+        })
+      </script>

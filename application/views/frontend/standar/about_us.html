@@ -1,0 +1,75 @@
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row mt-5 mb-5">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb bg-dark mt-4">
+            <li class="breadcrumb-item">
+              <a class="text-light" href="<?php echo base_url('');?>">Beranda </a>
+            </li>
+            <li class="breadcrumb-item active">
+              <a class="text-light" href="<?php echo base_url('tentang_kami');?>">Tentang Kami</a>
+            </li>
+          </ol>
+
+        <!-- Title -->
+        <h2 class="mt-4"><center><?php echo $kontak->NAMA_KONTAK; ?></center></h2>
+
+        <!-- Author -->
+        <hr>
+        <p class="lead">
+          <div class="bio-pic rounded-circle mr-3">
+              <p class="mt-4">
+                <center></center>
+              </p>
+          </div>
+        </p>
+
+        <!-- Post Content -->
+        <p class="lead mt-4">
+          <?php echo $kontak->DESKRIPSI; ?>
+        </p>
+        
+
+
+      </div>
+
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+<script type="text/javascript">
+  $(document).ready(function(){
+    var BASE_URL = "<?php echo base_url();?>";
+    $('#myTable').DataTable();
+
+    $('#mengikuti').on('click', function(){
+      const idx = $(this).data('idx');
+      var id_mengikutix = 0;
+      id_mengikutix = $(this).data('idy');
+      if(id_mengikutix==null || id_mengikutix==""){
+        id_mengikutix = 0;
+      }
+      $.ajax({
+        url: BASE_URL + 'bio/mengikuti',
+        data: {id: idx, id_mengikuti : id_mengikutix},
+        method: 'post',
+        dataType: 'json',
+        success: function(response){
+          if(response.status=='sukses'){
+            alert(response.pesan);
+            $('#mengikuti').attr('disabled','disabled');
+            $('#mengikuti').html('Telah Mengikuti');
+          }else{
+            alert(response.pesan);
+          }
+        },
+          error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+            alert(xhr.responseText) 
+        }
+      });
+    });
+
+  })
+</script>

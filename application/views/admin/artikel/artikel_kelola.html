@@ -1,0 +1,195 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/artikel_kelola');?>">Artikel</a>
+      </li>
+      <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/artikel_kelola');?>">Manajemen Artikel</a></li>
+    </ol>  
+    
+    <a id="btn-tambah" href="<?php echo base_url('admin/artikel_buat');?>" class="btn btn-success mb-3 pull-right">
+      <span class="glyphicon glyphicon-plus"></span> &nbsp;Tambah Artikel
+    </a>
+
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-sticky-note"></i>
+              <b>Daftar Artikel</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                            <tr>
+                                <th><center>No</center></th>
+                                <th><center>Judul</center></th>
+                                <th><center>Tanggal</center></th>
+                                <th><center>Kategori</center></th>
+                                <th><center>Dibaca</center></th>
+                                <th><center>Rating</center></th>
+                                <th><center>Komentar</center></th>
+                                <th><center>Action</center></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                      <?php $n=1;
+                        foreach($artikel->result_array() as $d){
+                      ?>
+                        <tr>
+                        <td><?php echo $n;?></td>
+                        <td><a href="<?php echo site_url();?>Admin/artikel_ubah/<?php echo $d['ID_POSTING']?>"  data-idy="<?= $d['ID_POSTING'];?>"><?php echo $d['JUDUL'];?></a></td>
+                        <td>
+                          <?php 
+                            if(isset($d['TANGGAL'])){
+                              $tgl = $d['TANGGAL'];
+                              $source = $d['TANGGAL'];//date('Y-m-d ')
+                              $date = new DateTime($source);
+                              echo $date->format('m:i:s');
+                              echo '<br/>';
+                              echo $date->format('d-m-Y');
+                            }else{
+                              echo 'N/A';
+                            } 
+                          ?>                        
+                        </td>
+                        <td><?php echo $d['NAMA_KATEGORI'];?></td>
+                        <td><?php echo $d['VIEW'];?></td>
+                        <td><?php echo $d['RATING'];?></td>
+                        <td><?php echo $d['TOTAL_KOMENTAR'];?></td>
+                        <td>
+                          <center>
+                              <a href="<?php echo site_url('Artikel/hapus_artikel') + '/' + $d['ID_POSTING'];?>" class="btn btn-danger hapusartikel" data-toggle="modal" data-target="#formHapus" data-idx="<?= $d['ID_POSTING'];?>">Hapus</a>
+                          </center>
+                        </td>
+                        </tr>
+                        <?php $n++;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+        </ol>
+    </div>
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="formHapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formHapusJudul">Hapus Artikel</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="<?php echo base_url('artikel/artikel_hapus');?>" method="post">
+                <input type="text" id="idposting" name="idposting">
+                <p></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal hapus-->
+
+  </div>
+  <!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+        <!-- Custom js for this page-->
+      <script type="text/javascript">
+        //kategori
+        $(document).ready(function(){
+          var BASE_URL = "<?php echo base_url();?>"; 
+
+          $('.ubahkategori').on('click', function(){
+              $('#pesan-error-edit').hide();
+              const idx = $(this).data('idy');
+              $.ajax({
+                  url: BASE_URL + 'Kategori/getkategori',
+                  data: {idx : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(data){
+                      $('#idkategori-edit').val(data.ID_KATEGORI);
+                      $('#namakategori-edit').val(data.NAMA_KATEGORI);
+                      $('#aktifkategori-edit').val(data.AKTIF); 
+                      $('#btn-ubah-kategori').on('click', function(){
+                        $.ajax({
+                          url: BASE_URL + 'Kategori/kategori_ubah',
+                          data: $("#formEdit form").serialize(),
+                          method: 'post',
+                          dataType: 'json',
+                          success: function(response){
+                              if(response.status=='sukses'){
+                                $('#pesan-error-edit').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                                var url = "";
+                                window.setTimeout(function(){ window.location = url; },3000);
+                              }else{
+                                $('#pesan-error-edit').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                              }
+                            },
+                              error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.responseText) 
+                              }
+                          });
+                      });
+ 
+                  }
+              });
+          });
+
+          $('.hapusartikel').on('click', function(){
+              $('#formHapusJudul').html('Hapus Artikel');
+              $('#formHapus .modal-dialog .modal-content .modal-footer button[type=submit]').html('Hapus Data');          const idx = $(this).data('idx');
+              $.ajax({
+                  url: BASE_URL + 'Artikel/getartikel',
+                  data: {idx : idx},
+                  method: 'post',
+                  dataType: 'json',
+                  success: function(data){
+                    $('#idposting').val(data.ID_POSTING);
+                    $('#idposting').attr('type','hidden'); 
+                    $('#formHapus .modal-dialog .modal-content .modal-body form p').html('Anda yakin mau menghapus artikel '+ data.JUDUL + ' ?');  
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                      alert(xhr.responseText) 
+                    }          
+              });
+          });
+
+          $('#btn-tambah').on('click', function(){
+              $('#pesan-error-tambah').hide();
+              $('#btn-tambah-kategori').on('click', function(){
+                  $.ajax({
+                    url: BASE_URL + 'Kategori/kategori_buat',
+                    data: $("#formTambah form").serialize(),
+                    method: 'post',
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.status == 'sukses'){
+                          $('#pesan-error-tambah').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                          var url = "";
+                          window.setTimeout(function(){ window.location = url; },3000);
+                        }else{
+                          $('#pesan-error-tambah').html(response.pesan).fadeIn().delay(1000).fadeOut();
+                        }
+                    },
+                      error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.responseText) 
+                      }
+                  });
+              });
+          });
+      })
+    </script>

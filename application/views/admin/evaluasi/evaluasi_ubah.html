@@ -1,0 +1,407 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('admin/evaluasi');?>">Evaluasi</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/evaluasi/');?>">Detail Pertanyaan</a></li>
+      </ol>  
+      
+      <!-- Beri id "pesan-error" untuk menampung pesan error -->
+      <div class="pesan"></div>
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fa fa-check-circle"></i>
+                <b>Sunting Pertanyaan</b>
+              </div>
+              <div class="card-body">
+                  <?php if(isset($pertanyaan)){ ?>
+                  <form id="formsimpan" method="POST">                      
+                      <input type="hidden" value="<?php echo $pertanyaan->ID_KUESIONER;?>" name="id" id="id" class="form-control">  
+                      <div class="form-group">
+                        <label for="pertanyaan"><b>Variabel</b></label>
+                        <input value="<?php echo $pertanyaan->VARIABEL;?>" name="variabel" type="text" class="form-control" id="variabel" aria-describedby="variabel" placeholder="Masukkan variabel...">
+                        <small id="judulHelp" class="form-text text-muted">Sunting variabel untuk kuesioner.</small>
+                      </div>
+                      <div class="form-group">
+                          <label for="isiartikel"><b>Pertanyaan</b></label>
+                          <textarea id="mytextarea" form="formsimpan" rows="5" name="pertanyaan" class="form-control tinymce" required placeholder="tulis isi pertanyaan...">
+                              <?php echo $pertanyaan->PERTANYAAN;?>
+                          </textarea>
+                          <small id="isiartikelHelp" class="form-text text-muted">Sunting pertanyaan untuk kuesioner!</small>
+                      </div>
+                      <button id="btn-simpan" type="button" class="btn btn-primary">Simpan</button>
+                  </form>
+                  <?php }?>
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+
+          <a type="button" data-toggle="modal" data-target="#modaltambah" class="btn btn-success mb-3 pull-right konfir-tambah">
+            <span class="glyphicon glyphicon-plus"></span> &nbsp;Tambah Skala Jawaban
+          </a>
+
+          <!-- DataTables Tabel Rentang jawaban -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-check-circle"></i>
+              <b>Daftar Skala Jawaban (Skala Likert 1 - 5)</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="myTable_Nilai" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th><center>No</center></th>
+                        <th><center>Predikat</center></th>
+                        <th><center>Nilai</center></th>
+                        <th><center>Action</center></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                        $n = 1;
+                        foreach($rentang_nilai->result_array() as $nilai){
+                      ?>
+                      <tr>
+                        <td><?php echo $n;?></td>
+                        <td><?php echo $nilai['PREDIKAT'];?></td>
+                        <td><?php echo $nilai['NILAI'];?></td>
+                        <td>
+                            <center>
+                              <a href="#" class="btn btn-danger konfir-hapus" data-toggle="modal" data-target="#modalhapus" data-idx="<?= $nilai['ID_NILAI'];?>" data-idy="<?= $nilai['PREDIKAT'];?>" >Hapus</a>
+                              <a href="#" class="btn btn-primary konfir-edit" data-toggle="modal" data-target="#modaledit" data-idx="<?= $nilai['ID_NILAI'];?>" data-idy="<?= $nilai['PREDIKAT'];?>" data-idz="<?= $nilai['NILAI'];?>" >Edit</a>
+                            </center>
+                        </td>
+                      </tr>
+                      <?php $n++;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+
+          <br/>
+          <!-- DataTables Tabel Detail Jawaban -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-check-circle"></i>
+              <b>Daftar Jawaban</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="myTable_Jawaban" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th><center>No</center></th>
+                        <th><center>Tanggal</center></th>
+                        <th><center>Responden</center></th>
+                        <th><center>Variabel</center></th>
+                        <th><center>Pertanyaan</center></th>
+                        <th><center>Jawab</center></th>
+                        <th><center>Nilai</center></th>
+                        <th><center>Action</center></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <?php $n=1;
+                          foreach($jawaban->result_array() as $d){
+                        ?>
+                          <tr>
+                            <td><?php echo $n;?></td>
+                            <td><?php echo $d['TANGGAL_JAWAB'];?></td>
+                            <td>
+                                <?php echo $d['NAMA_PENILAI'];?>
+                            </td>
+                            <td><?php echo $d['VARIABEL'];?></td>
+                            <td><?php echo $d['PERTANYAAN'];?></td>
+                            <td><?php echo $d['JAWAB'];?></td>
+                            <td><?php echo $d['NILAI'];?></td>
+                          <td>
+                            <center>
+                                <a href="#" class="btn btn-danger konfir-hapus-jawaban" data-toggle="modal" data-target="#modalhapus-jawaban" data-idx="<?= $d['ID_JAWABAN'];?>" >Hapus</a>
+                            </center>
+                          </td>
+                          </tr>
+                          <?php $n++;}?>
+                      </tbody>   
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          </div>
+
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+<!-- Modal Hapus -->
+<div class="modal fade" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="formHapusJudul">Konfirmasi Hapus Skala</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Beri "pesan" untuk menampung pesan error -->
+        <div class="pesan"></div>
+        <p id="konfirhapus">Anda yakin mau menghapus skala ini?</p>
+        <form method="post" id="formhapus">
+            <input type="hidden" id="id-hapus" name="id">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+        <button type="submit" class="btn btn-danger" id="btn-hapus">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- Akhir dari modal hapus-->
+
+<!-- Modal Tambah -->
+<div class="modal fade" id="modaltambah" tabindex="-1" role="dialog" aria-labelledby="formTambah" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formTambahJudul">Tambah Skala Jawaban</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Beri "pesan" untuk menampung pesan error -->
+          <div class="pesan"></div>
+          <form id="formtambah" method="post">
+              <input type="hidden" id="id" name="id" value="<?php echo $pertanyaan->ID_KUESIONER; ?>">
+              <div class="form-group">
+                  <label for="predikat">Predikat: </label>
+                  <input type="text" class="form-control" id="predikat-tambah" name="predikat">
+              </div>
+              <div class="form-group">
+                  <label for="nilai">Nilai: </label>
+                  <input type="text" class="form-control" id="nilai-tambah" name="nilai">
+              </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary" id="btn-tambah">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <!-- Akhir dari modal tambah-->
+
+  <!-- Modal Edit -->
+<div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="formedit" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formTambahJudul">Tambah Skala Jawaban</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Beri "pesan" untuk menampung pesan error -->
+          <div class="pesan"></div>
+          <form id="formedit" method="post">
+              <input type="hidden" id="id-edit" name="id">
+              <div class="form-group">
+                  <label for="predikat">Predikat: </label>
+                  <input type="text" class="form-control" id="predikat-edit" name="predikat">
+              </div>
+              <div class="form-group">
+                  <label for="nilai">Nilai: </label>
+                  <input type="text" class="form-control" id="nilai-edit" name="nilai">
+              </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary" id="btn-edit">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <!-- Akhir dari modal tambah-->
+
+  <!-- Modal Hapus Jawaban-->
+  <div class="modal fade" id="modalhapus-jawaban" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formHapusJudul">Hapus Jawaban</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="pesan"></div>
+            <form method="post" id="formhapus-jawaban">
+                <input type="hidden" id="idjawaban" name="id">
+                <p id="jawaban-hapus"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-danger btn-hapus">Hapus</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal hapus-->
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+    <script type="text/javascript">
+      
+      
+      //buat artikel
+    $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('#myTable_Jawaban').DataTable();
+        $('#myTable_Nilai').DataTable();
+
+        $('.btn-tutup').on('click', function(){
+          var url = "";
+          window.setTimeout(function(){ window.location = url; },1000);
+        });
+
+    $('.konfir-tambah').on('click', function(){
+      $('#btn-tambah').on('click',function(){
+          $.ajax({
+              url: BASE_URL + 'Kritik_Saran/tambah_skala',
+              data: $("#formtambah").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                  $('#predikat-tambah').val('');
+                  $('#nilai-tambah').val('');
+                }else{
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    $('.konfir-hapus').on('click', function(){
+      var idskala = $(this).data('idx');
+      $('#id-hapus').val(idskala);
+      $('#btn-hapus').on('click',function(){
+        $.ajax({
+              url: BASE_URL + 'Kritik_Saran/hapus_skala',
+              data: $("#formhapus").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    $('#btn-simpan').on('click', function(){
+      $.ajax({
+              url: BASE_URL + 'Kritik_Saran/ubah_pertanyaan',
+              data: $("#formsimpan").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+    });
+
+  $('.konfir-edit').on('click', function(){
+      var idskala = $(this).data('idx');
+      var predikat = $(this).data('idy');
+      var nilai = $(this).data('idz');
+      $('#id-edit').val(idskala);
+      $('#nilai-edit').val(nilai);
+      $('#predikat-edit').val(predikat);
+      $('#btn-edit').on('click',function(){
+        $.ajax({
+              url: BASE_URL + 'Kritik_Saran/edit_skala',
+              data: $("#formedit").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    $('.konfir-hapus-jawaban').on('click', function(){
+      var idjawaban = $(this).data('idx');
+      $('#idjawaban').val(idjawaban);
+      $('#jawaban-hapus').html('Anda yakin mau menghapus jawaban ini?');
+      $('.btn-hapus').on('click',function(){
+          $.ajax({
+              url: BASE_URL + 'Kritik_Saran/hapus_jawaban',
+              data: $("#formhapus-jawaban").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    })
+  </script>

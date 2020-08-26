@@ -1,0 +1,137 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('admin/evaluasi');?>">Evaluasi</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/penjawab/');?>">Penjawab</a></li>
+      </ol>  
+      
+      <!-- Beri id "pesan-error" untuk menampung pesan error -->
+      <div class="pesan"></div>
+
+          <!-- DataTables Tabel Rentang jawaban -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-check-circle"></i>
+              <b>Daftar Responden</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th><center>No</center></th>
+                        <th><center>Tanggal Buat Akun</center></th>
+                        <th><center>Nama Lengkap</center></th>
+                        <th><center>Gender</center></th>
+                        <th><center>Profesi</center></th>
+                        <th><center>Email</center></th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                        $n = 1;
+                        foreach($penjawab->result_array() as $narasumber){
+                      ?>
+                      <tr>
+                        <td><?php echo $n;?></td>
+                        <td><?php echo $narasumber['TANGGAL'];?></td>
+                        <td><?php echo $narasumber['NAMA_PENILAI'];?></td>
+                        <td><?php echo $narasumber['GENDER'];?></td>
+                        <td><?php echo $narasumber['PROFESI'];?></td>
+                        <td><?php echo $narasumber['EMAIL_PENILAI'];?></td>
+                        <td>
+                          <center>
+                            <a href="#" class="btn btn-danger konfir-hapus-responden" data-toggle="modal" data-target="#modalhapus-penilai" data-idx="<?= $narasumber['ID_PENILAI'];?>" data-idy="<?= $narasumber['NAMA_PENILAI'];?>">Hapus</a>
+                          </center>
+                          </td>
+                      </tr>
+                      <?php $n++;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+    <!-- Modal Hapus Penilai-->
+    <div class="modal fade" id="modalhapus-penilai" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="formHapusJudul">Hapus Jawaban</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="pesan"></div>
+              <form method="post" id="formhapus-responden">
+                  <input type="hidden" id="idresponden" name="id">
+                  <p id="responden-hapus"></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+              <button type="button" class="btn btn-danger btn-hapus">Hapus</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>  
+    <!-- Akhir dari modal hapus-->
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+    <script type="text/javascript">
+            
+      //buat artikel
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        //$('#myTable_Penjawab').DataTable();
+
+    $('.konfir-hapus-responden').on('click', function(){
+      var idresponden = "";
+      var responden = "";
+      idresponden = $(this).data('idx');
+      responden = $(this).data('idy');
+      $('#idresponden').val(idresponden);
+      $('#responden-hapus').html('Anda yakin mau menghapus responden '+ responden+ '?');
+      $('.btn-hapus').on('click',function(){
+          $.ajax({
+              url: BASE_URL + 'Kritik_Saran/hapus_responden',
+              data: $("#formhapus-responden").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+                idresponden = "";
+                responden = "";
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    $('.btn-tutup').on('click', function(){
+      url ="";
+      window.setTimeout(function(){ window.location = url; },1000);
+    });
+      
+    })
+  </script>

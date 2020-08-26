@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Template by Bootstrap4, modified by Danar Dono (2019)">
+  <meta name="title" content="<?php echo $judul;?>" />
+  <meta name="description" content="<?php echo $identitas->META_DESKRIPSI; ?>" />
+  <meta name="keywords" content="<?php echo $identitas->META_KEYWORD; ?>" />
+  <link href="<?php echo base_url('asset/logo/logo.png');?>" rel="shortcut icon">
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="language" content="id" />
+  <meta name="language" content="id" />
+  <meta name="geo.country" content="id" />
+  <meta http-equiv="content-language" content="In-Id" />
+  <meta name="geo.placename" content="Indonesia" />
+  <meta http-equiv="Cache-Control" content="no-store" />
+ 
+  <title><?php echo $judul;?></title>
+  
+  <script src="<?php echo base_url('asset/admin/js/dist/Chart.js');?>"></script>
+  <script src="<?php echo base_url('asset/admin/js/dist/Chart.min.js');?>"></script>
+
+  <script src="<?php echo base_url('asset/tinymce/tinymce.min.js');?>"></script>
+  <script>
+    tinymce.init({
+    selector: '#mytextarea',
+    theme: "modern",
+    paste_data_images: true,
+    plugins: [
+      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "insertdatetime media nonbreaking save table contextmenu directionality",
+      "emoticons template paste textcolor colorpicker textpattern"
+    ],
+    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    toolbar2: "print preview media | forecolor backcolor emoticons",
+    image_advtab: true,
+    file_picker_callback: function(callback, value, meta) {
+      if (meta.filetype == 'image') {
+        $('#upload').trigger('click');
+        $('#upload').on('change', function() {
+          var file = this.files[0];
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            callback(e.target.result, {
+              alt: ''
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+    },
+    templates: [{
+      title: 'Test template 1',
+      content: 'Test 1'
+    }, {
+      title: 'Test template 2',
+      content: 'Test 2'
+    }],
+    setup: function (editor) {
+        editor.on('change', function () {
+            tinymce.triggerSave();
+        });
+      }
+    });
+
+
+  </script>
+  
+  <!-- Sweat alert plugin-->
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/sweet-alert/dist/sweetalert2.css');?>">
+  <script type="text/javascript" src="<?php echo base_url('asset/sweet-alert/dist/sweetalert2.min.js');?>"></script>
+
+  <!-- Custom fonts for this template-->
+  <link href="<?php echo base_url('asset/admin/vendor/fontawesome-free/css/all.min.css');?>" rel="stylesheet" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link href="<?php echo base_url('asset/admin/vendor/datatables/dataTables.bootstrap4.css');?>" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="<?php echo base_url('asset/admin/css/sb-admin.css');?>" rel="stylesheet">
+
+</head>
+<?php header('Set-Cookie: cross-site-cookie=name; SameSite=None; Secure'); ?>
+<body id="page-top">
+
+  <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+    <img src="<?php echo base_url('asset/logo/logo.png')?>" width="40" height="40">
+    <a class="navbar-brand mr-1 " href="<?php echo base_url();?>">KebaikanKita.com</a>
+
+    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navbar Search -->
+    <form method="POST" action="<?php echo base_url('admin/artikel_cari');?>" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <div class="input-group">
+        <input name="cari" type="text" class="form-control" placeholder="Mencari artikel..." aria-label="Search" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Navbar -->
+    <ul class="navbar-nav ml-auto ml-md-0">
+      <li class="nav-item dropdown no-arrow mx-1">
+        <a class="nav-link dropdown-toggle" href="<?php echo base_url('admin/notifikasi');?>" >
+          <center>
+              <span class="badge badge-danger"><?php if($notifikasi>0){echo $notifikasi;}?></span>
+              <img src="<?php echo base_url('asset/logo/notifikasi.png')?>" width="30" height="30">
+          </center>
+        </a>
+      </li>
+
+      <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <center>
+              <?php 
+                $profil = $this->MyModel->getprofil($_SESSION['user_id']);
+                if($profil->photo_profil <>""){ 
+              ?>
+              <img class="rounded-circle" src="<?php echo base_url();?>/<?php echo $profil->photo_profil;?>" width="30" height="30"><br/>
+              <?php }else{
+              ?>
+              <img class="rounded-circle" src="<?php echo base_url('asset/logo/user.png');?>" width="30" height="30"><br/>  
+              <?php } ?>
+              <?php 
+                $this->load->library('ion_auth');
+                $user = $this->ion_auth->user()->row();
+                echo $user->first_name;
+              ?>
+          </center>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+          <a class="dropdown-item" href="<?php echo base_url('admin/profil');?>">Pengaturan</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+        </div>
+      </li>
+    </ul>
+
+  </nav>

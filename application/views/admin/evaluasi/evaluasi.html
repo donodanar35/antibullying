@@ -1,0 +1,555 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/evaluasi');?>">Evaluasi</a>
+      </li>
+    </ol>  
+    
+    <a type="button" data-toggle="modal" data-target="#modaltambah" class="btn btn-success mb-3 pull-right konfir-tambah">
+      <span class="glyphicon glyphicon-plus"></span> &nbsp;Tambah Pertanyaan
+    </a>
+    <a target="_blank" href="<?php echo base_url('admin/penjawab'); ?>" class="btn btn-trasparant mb-3 pull-right">
+        <span class="fa fa-user ">&nbsp;Lihat Responden</span>
+      </a>
+    <a target="_blank" href="<?php echo base_url('Kritik_Saran'); ?>" class="btn btn-info mb-3 pull-right">
+      <span class="fa fa-refresh fa-eye">&nbsp;Lihat Kuesioner</span>
+    </a>
+
+    <ol class="breadcrumb">
+    <div class="container">
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-check-circle"></i>
+              <b>Daftar Kuesioner</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                            <tr>
+                                <th><center>No</center></th>
+                                <th><center>Diperbarui</center></th>
+                                <th><center>Variabel</center></th>
+                                <th><center>Pertanyaan</center></th>
+                                <th><center>Action</center></th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                      <?php $n=1;
+                        foreach($evaluasi->result_array() as $d){
+                      ?>
+                        <tr>
+                          <td><?php echo $n;?></td>
+                          <td><?php echo $d['TANGGAL'];?></td>
+                          <td>
+                              <?php echo $d['VARIABEL'];?>
+                          </td>
+                          <td>
+                            <a href="<?php echo base_url('admin/detail_kuesioner/') . $d['ID_KUESIONER'];?>"><?php echo $d['PERTANYAAN'];?></a>
+                          </td>
+                        <td>
+                          <center>
+                              <a href="#" class="btn btn-danger konfir-hapus" data-toggle="modal" data-target="#modalhapus" data-idx="<?= $d['ID_KUESIONER'];?>" data-idy="<?= $d['PERTANYAAN'];?>" >Hapus</a>
+                          </center>
+                        </td>
+                        </tr>
+                        <?php $n++;}?>
+                    </tbody>  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+        </div>
+      </ol>
+
+      <ol class="breadcrumb">
+          <div class="container">
+                <div class="card mb-12">
+                  <div class="card-header">
+                    <i class="fa fa-check-circle"></i>
+                    <b>Statistik Jawaban</b>
+                  </div>
+                  <div class="card-body">
+                      <canvas id="statistik-jawaban" width="100%" height="30"></canvas>
+                      
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Variabel</th>
+                            <th scope="col">Predikat</th>
+                            <th scope="col">Rata-Rata</th>
+                            <th scope="col">Total Nilai</th>
+                            <th scope="col">Jumlah</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php 
+                            $n=1;
+                            foreach($laporan as $report){
+                          ?>
+                          <tr>  
+                            <td><?php echo $n; ?></td>
+                            <td><?php echo $report->VARIABEL; ?></td>
+                            <td>
+                                <?php 
+                                  if($report->NILAI==5){
+                                    echo 'Sangat Baik';
+                                  }else if($report->NILAI>=4){
+                                    echo 'Baik';
+                                  }else if($report->NILAI>=3){
+                                    echo 'Cukup';
+                                  }else if($report->NILAI>=2){
+                                    echo 'Buruk';
+                                  }else{
+                                    echo 'Sangat Buruk';
+                                  }
+                                ?>
+                              </td>
+                            <td><?php echo $report->NILAI; ?></td>
+                            <td><?php echo $report->TOTAL; ?></td>
+                            <td><?php echo $report->JUMLAH; ?></td>
+                          </tr>
+                          <?php $n++; }?>   
+                        </tbody>
+                      </table> 
+                                         
+                  </div>
+                  <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+                </div>
+              </div>
+            </ol>
+
+      <ol class="breadcrumb">
+          <div class="container">
+                <div class="card mb-12">
+                  <div class="card-header">
+                    <i class="fa fa-check-circle"></i>
+                    <b>Daftar Jawaban</b>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered" id="dataTable_1" width="100%" cellspacing="0">
+                          <thead>
+                                  <tr>
+                                      <th><center>No</center></th>
+                                      <th><center>Tanggal</center></th>
+                                      <th><center>Responden</center></th>
+                                      <th><center>Variabel</center></th>
+                                      <th><center>Pertanyaan</center></th>
+                                      <th><center>Jawaban</center></th>
+                                      <th><center>Nilai</center></th>
+                                      <th><center>Action</center></th>
+                                  </tr>
+                          </thead>
+                          <tbody>
+                            <?php $n=1;
+                              foreach($jawaban->result_array() as $d){
+                            ?>
+                              <tr>
+                                <td><?php echo $n;?></td>
+                                <td><?php echo $d['TANGGAL_JAWAB'];?></td>
+                                <td>
+                                    <?php echo $d['NAMA_PENILAI'];?>
+                                </td>
+                                <td><?php echo $d['VARIABEL'];?></td>
+                                <td><?php echo $d['PERTANYAAN'];?></td>
+                                <td><?php echo $d['JAWAB'];?></td>
+                                <td><?php echo $d['NILAI'];?></td>
+                              <td>
+                                <center>
+                                    <a href="#" class="btn btn-danger konfir-hapus-jawaban" data-toggle="modal" data-target="#modalhapus-jawaban" data-idx="<?= $d['ID_JAWABAN'];?>" >Hapus</a>
+                                </center>
+                              </td>
+                              </tr>
+                              <?php $n++;}?>
+                          </tbody>  
+                      </table>
+                    </div>
+                  </div>
+                  <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+                </div>
+              </div>
+            </ol>
+ 
+            <ol class="breadcrumb">
+                <div class="container">
+                      <div class="card mb-12">
+                        <div class="card-header">
+                          <i class="fa fa-check-circle"></i>
+                          <b>Daftar Kritik dan Saran</b>
+                        </div>
+                        <div class="card-body">
+                          <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable_2" width="100%" cellspacing="0">
+                                <thead>
+                                        <tr>
+                                            <th><center>No</center></th>
+                                            <th><center>Tanggal Masukan</center></th>
+                                            <th><center>Penjawab</center></th>
+                                            <th><center>Kritik dan Saran</center></th>
+                                            <th><center>Action</center></th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                  <?php $n=1;
+                                    foreach($kritiksaran->result_array() as $d){
+                                  ?>
+                                    <tr>
+                                      <td><?php echo $n;?></td>
+                                      <td><?php echo $d['TANGGAL'];?></td>
+                                      <td>
+                                          <?php echo $d['NAMA_PENILAI'];?>
+                                      </td>
+                                      <td><?php echo $d['KRITIK_SARAN'];?></td>
+                                    <td>
+                                      <center>
+                                          <a href="#" class="btn btn-danger konfir-hapus-kritik" data-toggle="modal" data-target="#modalhapus-kritik" data-idx="<?= $d['ID_SARAN'];?>" >Hapus</a>
+                                      </center>
+                                    </td>
+                                    </tr>
+                                    <?php $n++;}?>
+                                </tbody>  
+                            </table>
+                          </div>
+                        </div>
+                        <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+                      </div>
+                    </div>
+                  </ol>
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formHapusJudul">Hapus Pertanyaan</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="pesan"></div>
+            <form method="post" id="formhapus">
+                <input type="hidden" id="idpertanyaan" name="id">
+                <p id="pertanyaan-hapus"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-danger btn-hapus">Hapus</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal hapus-->
+
+      <!-- Modal Hapus Kritik -->
+      <div class="modal fade" id="modalhapus-kritik" tabindex="-1" role="dialog" aria-labelledby="formhapuskritik" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="formHapusJudul">Hapus Kritik dan Saran</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="pesan"></div>
+                <form method="post" id="formhapus-kritik">
+                    <input type="hidden" id="idkritik" name="id">
+                    <p id="kritik-hapus"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-danger btn-hapus-kritik">Hapus</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>  
+      <!-- Akhir dari modal hapus-->
+    
+      <!-- Modal Hapus Jawaban-->
+      <div class="modal fade" id="modalhapus-jawaban" tabindex="-1" role="dialog" aria-labelledby="formHapus" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="formHapusJudul">Hapus Jawaban</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="pesan"></div>
+                <form method="post" id="formhapus-jawaban">
+                    <input type="hidden" id="idjawaban" name="id">
+                    <p id="jawaban-hapus"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-danger btn-hapus">Hapus</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>  
+      <!-- Akhir dari modal hapus-->
+
+  <!-- Modal Tambah -->
+  <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog" aria-labelledby="judulModalTambah" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formModalTambahLabel">Tambah Pertanyaan</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="pesan"></div>
+            <form method="POST" id="formtambah">
+                <div class="form-group">
+                    <label for="namakategori">Pertanyaan</label>
+                    <input type="text" class="form-control" id="pertanyaan-tambah" name="pertanyaan" placeholder="Tulis pertanyaan...">
+                </div>
+                <div class="form-group">
+                    <label for="namakategori">Variabel</label>
+                    <input type="text" class="form-control" id="variabel-tambah" name="variabel" placeholder="Tulis variabel...">
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+            <button type="button" class="btn btn-primary btn-tambah">Simpan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>  
+  <!-- Akhir dari modal tambah-->
+
+<!-- Modal Edit -->
+<div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="judulModalEdit" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formModalEditLabel">Edit Tagar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="pesan"></div>
+          <form id="formedit" method="post">
+              <input type="hidden" id="id-edit" name="id">
+              <div class="form-group">
+                  <label for="namakategori">#Tagar (Kata Kunci Artikel):</label>
+                  <input type="text" class="form-control" id="katakunci-edit" name="katakunci">
+              </div>
+              <div class="form-group">
+                  <label for="namakategori">Diakses (Total Diakses):</label>
+                  <input type="text" class="form-control" id="total-edit" name="total">
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-tutup" data-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-primary btn-edit">Ubah</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>  
+<!-- Akhir dari modal edit-->
+
+  </div>
+  <!-- /.container-fluid -->
+ 
+  <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+  <script type="text/javascript">
+  $(document).ready(function(){
+    var BASE_URL = "<?php echo base_url();?>";
+    $('#myTable_Pertanyaan').DataTable();
+    $('#myTable_Jawaban').DataTable();
+    $('#myTable_Masukan').DataTable();
+
+    $('.konfir-hapus-jawaban').on('click', function(){
+      var idjawaban = $(this).data('idx');
+      $('#idjawaban').val(idjawaban);
+      $('#jawaban-hapus').html('Anda yakin mau menghapus jawaban ini?');
+      $('.btn-hapus').on('click',function(){
+          $.ajax({
+              url: BASE_URL + 'Kritik_Saran/hapus_jawaban',
+              data: $("#formhapus-jawaban").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    $('.konfir-hapus').on('click', function(){
+      var idpertanyaan = $(this).data('idx');
+      var pertanyaan = $(this).data('idy');
+      $('#idpertanyaan').val(idpertanyaan);
+      $('#pertanyaan-hapus').html('Anda yakin mau menghapus pertanyaan ini ?');
+      $('.btn-hapus').on('click',function(){
+          $.ajax({
+              url: BASE_URL + 'Kritik_Saran/hapus_pertanyaan',
+              data: $("#formhapus").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    //
+    $('.konfir-hapus-kritik').on('click', function(){
+      var idkritik = $(this).data('idx');
+      $('#idkritik').val(idkritik);
+      $('#kritik-hapus').html('Anda yakin mau menghapus masukan ini ?');
+      $('.btn-hapus-kritik').on('click',function(){
+          $.ajax({
+              url: BASE_URL + 'Kritik_Saran/hapus_kritik',
+              data: $("#formhapus-kritik").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }else{
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    $('.konfir-tambah').on('click', function(){
+      $('.btn-tambah').on('click',function(){
+          $.ajax({
+              url: BASE_URL + 'Kritik_Saran/tambah_pertanyaan',
+              data: $("#formtambah").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status=='sukses'){
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                  $('#variabel-tambah').val('');
+                  $('#pertanyaan-tambah').val('');
+                }else{
+                  alert(response.pesan);
+                  $('.pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(1000).fadeOut();
+                }
+              },
+                error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                  alert(xhr.responseText);
+                  console.log(xhr.responseText);
+              }
+            });
+      });
+    });
+
+    $('.btn-tutup').on('click', function(){
+      url ="";
+      window.setTimeout(function(){ window.location = url; },1000);
+    });
+
+    $('#statistik-jawaban').ready(function(){
+          const idx = "<?php echo $_SESSION['user_id'];?>";
+          $.ajax({
+            url: BASE_URL + 'Kritik_Saran/laporan_jawaban',
+            method: 'post',
+            dataType: 'json',
+            success: function(response){
+              for(var i=0;i<response.length;i++){
+                //alert(response[i]);
+                response.forEach(function(item){
+                  $('.statistik-tabel').html('<tr><td>'+response.variabel+'</td>' + '<td>'+response.nilai+'</td></tr>');
+                });
+              }
+              var $d = $('#statistik-jawaban');
+              var cty = $d.get(0).getContext('2d');
+              laporan_jawaban(cty, response.variabel, response.nilai, response.judul);
+            },
+            error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+              alert(xhr.responseText) 
+            }
+          });
+        });
+
+        function laporan_jawaban(cty, variabel, nilai, judul){
+          var myChart2 = new Chart(cty, {
+              type: 'bar',
+              data: {
+                  labels: variabel,
+                  datasets: [{
+                      label: judul,
+                      data: nilai,
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)'
+                      ],
+                      borderColor: [
+                          'rgba(255, 99, 132, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)'
+                      ],
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero: true
+                          }
+                      }]
+                  }
+              }
+          });   
+        }
+
+  });
+  </script>

@@ -1,0 +1,75 @@
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo base_url('admin/kontak');?>">Kontak</a>
+      </li>
+      <li class="breadcrumb-item active">Detail Kontak Website</li>
+    </ol>  
+
+    <!-- Beri id "pesan" untuk menampung pesan error -->
+    <div id="pesan"></div>
+    
+    <ol class="breadcrumb">
+    <div class="container">
+          <!-- DataTables Tabel Kategori -->
+          <div class="card mb-12">
+            <div class="card-header">
+              <i class="fa fa-info-circle"></i>
+              <b>Kebijakan Website</b> 
+            </div>
+            <div class="card-body">
+              <?php if(isset($kebijakan)){?>
+                <form id="formBuat" action="<?php echo base_url('kontak/simpan');?>" method="POST">
+                    <input name="idkebijakan" value="<?php echo $kebijakan->ID_KEBIJAKAN; ?>" class="form-control" type="hidden">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1"><b>Nama Kebijakan</b></label>
+                      <input name="namakebijakan" value="<?php echo $kebijakan->NAMA_KEBIJAKAN; ?>" class="form-control" type="text" placeholder="Masukkan nama kontak...">
+                    </div>
+                    <div class="form-group">
+                        <label for="deskripsi"><b>Deskripsi Kebijakan</b></label>
+                        <textarea id="mytextarea" form="formBuat" rows="10" name="kebijakan" class="form-control tinymce deskripsikontak" required placeholder="tulis deskripsi website...">
+                            <?php echo $kebijakan->KEBIJAKAN; ?>
+                        </textarea>
+                        <small id="isiartikelHelp" class="form-text text-muted">Tulis deskripsi website yang akan ditampilkan pada halaman Tentang Kami!</small>
+                    </div>
+                    <button type="button" id="btn-tambah-kontak" class="btn btn-primary" name="tombol" value="submit">Simpan</button>
+                </form>
+                <?php }?>
+            </div>
+            <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+          </div>
+        </ol>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+ 
+
+<script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>        
+        <!-- Custom js for this page-->
+      <script type="text/javascript">
+        //kontak
+        $(document).ready(function(){
+          var BASE_URL = "<?php echo base_url();?>"; 
+          $('#pesan-error-identitas').hide();        
+          $('#btn-tambah-kontak').on('click', function(){
+            $.ajax({
+              url: BASE_URL + 'kebijakan/simpan',
+              data: $("#formBuat").serialize(),
+              method: 'post',
+              dataType: 'json',
+              success: function(response){
+                if(response.status == 'sukses'){
+                  $('#pesan').html('<div class="alert alert-success">'+ response.pesan +'</div>').fadeIn().delay(10000).fadeOut();
+                }else{
+                  $('#pesan').html('<div class="alert alert-danger">'+ response.pesan +'</div>').fadeIn().delay(10000).fadeOut();
+                }
+              },
+              error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                alert(xhr.responseText) 
+              }                
+            });
+          });
+        })
+      </script>

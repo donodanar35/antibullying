@@ -1,0 +1,121 @@
+<div id="content-wrapper">
+    <div class="container-fluid">
+        
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<?php echo base_url('admin/galeri');?>">Galeri</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="<?php echo base_url('admin/galeri_upload');?>">Upload Gambar</a></li>
+      </ol>  
+      
+      <!-- Beri id "pesan-error" untuk menampung pesan error -->
+      <div id="pesan"></div>
+
+      <ol class="breadcrumb">
+      <div class="container">
+            <!-- DataTables Tabel Artikel -->
+            <div class="card mb-12">
+              <div class="card-header">
+                <i class="fas fa-table"></i>
+                <b>Upload Gambar</b>
+              </div>
+              <div class="card-body">
+                  <form id="formBuat" method="POST">
+                      <div class="form-group">
+                        <label for="kategori"><b>Gambar</b></label>
+                        <div class="form-label-group">
+                            <center>
+                              <img id="gambar" src="<?php echo base_url('images/standar.jpg');?>" width="100%" height="100%">
+                            </center>
+                            <input type="file" id="fileku" name="file" size="33" />
+                            <small id="judulHelp" class="form-text text-muted">Silahkan upload gambar!</small>
+                        </div>
+                      </div>                      
+                      <input type="hidden" value="" name="pathfoto" id="pathfoto" class="form-control">
+                      <input name="id" type="hidden" class="form-control" id="id" value="<?php echo $pengguna;?>">
+                      <div class="form-group">
+                        <label for="judul"><b>Judul</b></label>
+                        <input name="judul" type="text" class="form-control" id="judul" aria-describedby="Judul" placeholder="Masukkan judul...">
+                        <small id="judulHelp" class="form-text text-muted">Tulis judul Gambar! </small>
+                      </div>
+                      <div class="form-group">
+                        <label for="deskripsigambar"><b>Deskripsi Gambar</b></label>
+                        <textarea id="deskripsigambar" form="formBuat" rows="5" name="deskripsigambar" class="form-control" required placeholder="Tulis deskripsi/ keterangan gambar..."></textarea>
+                        <small id="deksirpsiartikelHelp" class="form-text text-muted">Tulis deskripsi/ keterangan gambar! Usahakan deskripsi artikel tidak lebih dari 160 karakter.</small>
+                      </div>
+                      <button id="btn-simpan-artikel" type="button" class="btn btn-primary">Simpan</button>
+                  </form>
+              </div>
+            </div>
+              <div class="card-footer small text-muted">Copyright &copy;<script>document.write(new Date().getFullYear());</script> KebaikanKita.com</div>
+            </div>
+          </ol>
+      </div>
+    </div>
+    <!-- /.container-fluid --> 
+
+    <script src="<?php echo base_url('asset/jquery/jquery.min.js');?>"></script>  
+
+    <script type="text/javascript">
+      
+      
+      //buat artikel
+      $(document).ready(function(){
+        var BASE_URL = "<?php echo base_url();?>";
+        $('#btn-simpan-artikel').on('click', function(){
+          $.ajax({
+                  url: BASE_URL + 'Galeri/galeri_buat',
+                  data: $("#formBuat").serialize(),
+                  method: 'POST',
+                  dataType: 'json',
+                  success: function(response){
+                    //alert(response.pesan + response.status);
+                    if(response.status == 'sukses'){
+                      $('#pesan').html('<div class="alert alert-success">' + response.pesan +'</div>').fadeIn().delay(10000).fadeOut();
+                      alert(response.pesan);
+                      $('#btn-simpan-artikel').attr('disabled','true');
+                      var url = BASE_URL + "admin/galeri";
+                      window.setTimeout(function(){ window.location = url; },1000); 
+                    }else{
+                      $('#pesan').html('<div class="alert alert-danger">' + response.pesan + '</div>').fadeIn().delay(10000).fadeOut();
+                      alert('Terjadi kesalahan!');
+                    }
+                  },
+                    error: function (xhr, ajaxOptions, thrownError) { // Ketika terjadi error
+                      alert(xhr.responseText) 
+                    }
+                });
+        });
+
+                $('#fileku').on('change', function () {
+                    var BASE_URL = "<?php echo base_url();?>";
+                    var file_data = $('#fileku').prop('files')[0];
+                    var form_data = new FormData();
+                    form_data.append('file', file_data);
+                    $.ajax({
+                        url: BASE_URL + 'Artikel/upload_file', 
+                        dataType: 'json', 
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        type: 'post',
+                        success: function (response) {
+                          if(response.status == 'sukses'){
+                            $('#pathfoto').val(response.pesan); 
+                            var path_foto = BASE_URL + response.pesan;
+                            $('#gambar').attr('src',path_foto);
+                          }else{
+                            alert(response.pesan);
+                          }
+                            
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                          alert(xhr.responseText); 
+                        }
+                    });
+                });
+
+    })
+  </script>
